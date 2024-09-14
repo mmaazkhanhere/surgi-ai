@@ -1,0 +1,6 @@
+streamlit
+python_dotenv == 1.0.1
+langchain
+pinecone-client
+
+PyPDF2 == 3.0.1
