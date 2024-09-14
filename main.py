@@ -118,17 +118,20 @@ if st.session_state.active_section == "Pre Surgery Report":
             for file in scan_files:
                 scan_text += extract_text_from_pdf(file) + "\n\n\n\n"
 
-            st.write(f"Presecription Text: {prescription_text}\n")
-            st.write(f"Lab Report Text: {lab_report_text}\n")
-            st.write(f"Scan Text: {scan_text}\n")
             
             pre_surgery_report= pre_surgery_crew(surgery_name, "56" , prescription_text, lab_report_text,scan_text)
 
             # Todo: Get response from AI and assign to response variable
             st.success("Report generated successfully!")
             st.write(pre_surgery_report)
+            st.write(type(pre_surgery_report))
 
-            report_pdf_conversion = convert_to_pdf(pre_surgery_report)
+            # Assuming CrewOutput is a class type
+
+            output_type = pre_surgery_report
+            type_as_str = str(output_type)
+            
+            report_pdf_conversion = convert_to_pdf(type_as_str)
 
             st.download_button(
                 label="Download Report",
