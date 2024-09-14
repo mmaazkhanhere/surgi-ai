@@ -2,13 +2,13 @@ import streamlit as st
 import os
 
 from crews.during_surgery_crew import during_surgery_crew
-
+from crews.pre_surgery_crew import pre_surgery_crew
 from helper_functions.ocr_helper import ocr_helper
 from helper_functions.display_files_in_rows import display_files_in_rows
 from helper_functions.convert_to_pdf import convert_to_pdf
-from helper_functions.pdf_text_extractor import extract_text_from_pdf
+from helper_functions.PDF_text_extractor import extract_text_from_pdf
+from crews.pre_surgery_crew import pre_surgery_crew
 
-from crews.during_surgery_crew import during_surgery_crew
 from helper_functions.display_files_in_rows import display_files_in_rows
 from helper_functions.convert_to_pdf import convert_to_pdf
 
@@ -111,19 +111,6 @@ if st.session_state.active_section == "Pre Surgery Report":
                     else:
                         st.warning(f"Unsupported file type: {filename}")
 
-                # Display the extracted text
-                if prescription_text:
-                    st.header("Extracted Prescription Text")
-                    st.text_area("Prescription Text", prescription_text, height=300)
-
-                    # Optionally, provide a download button for the extracted text
-                    st.download_button(
-                        label="Download Extracted Text",
-                        data=prescription_text,
-                        file_name="prescription_text.txt",
-                        mime="text/plain"
-                    )
-
 
             for file in lab_report_files:
                 lab_report_text += extract_text_from_pdf(file) + "\n\n\n\n"
@@ -135,14 +122,13 @@ if st.session_state.active_section == "Pre Surgery Report":
             st.write(f"Lab Report Text: {lab_report_text}\n")
             st.write(f"Scan Text: {scan_text}\n")
             
-
+            pre_surgery_report= pre_surgery_crew(surgery_name, "56" , prescription_text, lab_report_text,scan_text)
 
             # Todo: Get response from AI and assign to response variable
-            response = "This is a sample response from the AI model."
             st.success("Report generated successfully!")
-            st.write(response)
+            st.write(pre_surgery_report)
 
-            report_pdf_conversion = convert_to_pdf(response)
+            report_pdf_conversion = convert_to_pdf(pre_surgery_report)
 
             st.download_button(
                 label="Download Report",
