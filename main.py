@@ -1,10 +1,17 @@
 import streamlit as st
 import os
+
 from crews.during_surgery_crew import during_surgery_crew
+
 from helper_functions.ocr_helper import ocr_helper
 from helper_functions.display_files_in_rows import display_files_in_rows
 from helper_functions.convert_to_pdf import convert_to_pdf
 from helper_functions.pdf_text_extractor import extract_text_from_pdf
+
+from crews.during_surgery_crew import during_surgery_crew
+from helper_functions.display_files_in_rows import display_files_in_rows
+from helper_functions.convert_to_pdf import convert_to_pdf
+
 
 st.set_page_config(
     page_title="SurgiAI",
@@ -128,6 +135,7 @@ if st.session_state.active_section == "Pre Surgery Report":
             st.write(f"Lab Report Text: {lab_report_text}\n")
             st.write(f"Scan Text: {scan_text}\n")
             
+
 
             # Todo: Get response from AI and assign to response variable
             response = "This is a sample response from the AI model."
