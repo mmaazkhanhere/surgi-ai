@@ -2,8 +2,13 @@ import os
 from dotenv import load_dotenv
 
 from crewai import Agent, Task, Crew, Process
+from crewai_tools import tool
 
 from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain.chains import RetrievalQA
+
+from helper_functions.pinecone_vector_store import pinecone_vector_store
+from helper_functions.pinecone_vector_store import embeddings
 
 load_dotenv()
 
@@ -13,6 +18,25 @@ llm_model = ChatGoogleGenerativeAI(
             temperature=0.5,
             api_key=os.getenv('GOOGLE_API_KEY')
         )
+
+@tool
+def query_pinecone(surgeon_query: str):
+    "Query pinecone database and retreive relevant information based on the query"
+
+    vector_store = pinecone_vector_store()
+    embedding = embeddings()
+
+    knowledge = vector_store.from_existing_index(index_name="surgical-assistant",
+                                                embedding=embedding)
+
+    qa = RetrievalQA.from_chain_type(llm=llm_model,
+                                    chain_type="stuff",
+                                    retriever=knowledge.as_retriever()
+                                )
+    result = qa.invoke(surgeon_query).get("result")
+    return result
+
+
 def during_surgery_crew(surgeon_query: str, patient_history: str)-> str:
     # defining agents of the crew
     manager_agent = Agent(llm=llm_model,
@@ -28,7 +52,8 @@ def during_surgery_crew(surgeon_query: str, patient_history: str)-> str:
                                     goal="Provide clear, concise, and accurate anatomical insights in response to surgeon queries.",
                                     backstory="The agent specialize in human anatomy and are responsible for delivering precise anatomical details during surgery. When the surgeon asks a query {surgeon_query}, agent provide relevant and easily understandable insights that aid in the surgical process",
                                     verbose=True,
-                                    allow_delegation=False
+                                    allow_delegation=False,
+                                    tools=[query_pinecone]
                                 )
 
     infection_prevention_agent = Agent(llm=llm_model,
@@ -53,6 +78,7 @@ def during_surgery_crew(surgeon_query: str, patient_history: str)-> str:
                                 backstory="This agent serve as the primary consultant during surgery, integrating insights from specialized agents to provide the surgeon with clear, actionable responses. The agent focus is on delivering accurate, to-the-point guidance that factors in both expert insights and the patient's medical history.",
                                 verbose=True,
                                 allow_delegation=True,
+                                tools=[query_pinecone]
                             )
 
     # Defining tasks for the agents
@@ -90,6 +116,7 @@ def during_surgery_crew(surgeon_query: str, patient_history: str)-> str:
                         "the surgeon's query and aids in making informed decisions during surgery."
                     ),
                     agent=anatomy_specialist_agent,
+                    tools=[query_pinecone]
                 )
 
 
@@ -136,6 +163,7 @@ def during_surgery_crew(surgeon_query: str, patient_history: str)-> str:
                                 "Deliver a direct, concise response to the surgeons query {surgeon_query} in 2 sentence. Dont give general answer"
                             ),
                             agent=expert_surgeon_agent,
+                            tools=[query_pinecone]
                         )
 
 
