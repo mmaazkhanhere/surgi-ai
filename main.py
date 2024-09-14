@@ -123,8 +123,7 @@ if st.session_state.active_section == "Pre Surgery Report":
 
             # Todo: Get response from AI and assign to response variable
             st.success("Report generated successfully!")
-            st.write(pre_surgery_report)
-            st.write(type(pre_surgery_report))
+            
 
             # Assuming CrewOutput is a class type
 
