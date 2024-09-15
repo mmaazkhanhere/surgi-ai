@@ -3,7 +3,6 @@ from dotenv import load_dotenv
 from typing import List
 
 from crewai import Agent, Task, Crew, Process
-from crewai_tools import tool
 
 from langchain_groq import ChatGroq
 
