@@ -10,6 +10,7 @@ from langchain_community.tools.tavily_search import TavilySearchResults
 from tavily import TavilyClient
 
 
+
 load_dotenv()
 
 llm_model = ChatGroq(
@@ -135,12 +136,6 @@ def surgery_post_faq_crew(surgery_details: str, surgery_conversation: str) -> st
         description=(
             "1. Initiate the post-surgery FAQ generation process using the provided surgery details {surgery_details} and surgery conversation {surgery_conversation}.\n"
             "2. Delegate specific FAQ categories to the specialized agents: \n"
-            "   - Postoperative Care Specialist\n"
-            "   - Risks and Complications Analyst\n"
-            "   - Medications Specialist\n"
-            "   - Recovery Process Advisor\n"
-            "   - Patient Condition Analyst\n"
-            "   - General Post-Surgery Information Expert\n"
             "3. Collect the generated FAQs from each specialized agent.\n"
             "4. Ensure all FAQs are comprehensive and cover all necessary aspects of post-surgery care and information.\n"
             "5. Pass the collected FAQs to the Final FAQ Compiler for integration."
