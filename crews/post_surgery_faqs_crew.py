@@ -5,6 +5,10 @@ from typing import List
 from crewai import Agent, Task, Crew, Process
 
 from langchain_groq import ChatGroq
+from langchain_community.tools.tavily_search import TavilySearchResults
+
+from tavily import TavilyClient
+
 
 load_dotenv()
 
@@ -15,6 +19,7 @@ llm_model = ChatGroq(
     api_key=os.getenv('GROQ_API_KEY')
 )
 
+tavily_search  = TavilySearchResults(max_results=2)
 
 def surgery_post_faq_crew(surgery_details: str, surgery_conversation: str) -> str:
     """
@@ -73,6 +78,7 @@ def surgery_post_faq_crew(surgery_details: str, surgery_conversation: str) -> st
         ),
         verbose=True,
         allow_delegation=False,
+        tools=[tavily_search]
     )
 
     recovery_process_agent = Agent(
