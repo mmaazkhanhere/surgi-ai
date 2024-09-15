@@ -12,12 +12,6 @@ from bs4 import BeautifulSoup
 def convert_to_pdf(markdown_text):
     """
     Converts markdown text to a PDF document using ReportLab.
-
-    Parameters:
-        markdown_text (str): The input text in markdown format to be converted to a PDF.
-
-    Returns:
-        BytesIO: A file-like object containing the generated PDF, ready for saving or further processing.
     """
 
     # Convert markdown to HTML
@@ -50,7 +44,6 @@ def convert_to_pdf(markdown_text):
             style = styles["Heading1"] if element.name == "h1" else styles["Heading2"]
         else:
             style = custom_style
-
         text = str(element)
 
         # Handle multiple newlines by adding Spacer elements

@@ -58,8 +58,10 @@ def pre_surgery_report_crew(
     scans_text: str
 ) -> str:
 
-    # Defining agents of the crew with updated, precise goals and backstories
+    """A functiont takes 5 inputs and generate a detailed pre surgery report containing various instructions and guidance to help
+    the surgeon during surgery"""
 
+    # Defining agents of the crew with updated, precise goals and backstories
     medications_and_prescriptions_summary_agent = Agent(
         llm=llm_model,
         role="Certified Prescription Specialist",
@@ -163,7 +165,6 @@ def pre_surgery_report_crew(
     )
 
     # Defining tasks for each agent in the pre-surgical report system
-
     medications_and_prescriptions_summary_task = Task(
         description=(
             "1. Receive input: {surgery_name}, {patient_age}, {prescription_text}.\n"

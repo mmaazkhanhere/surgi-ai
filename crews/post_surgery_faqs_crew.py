@@ -8,8 +8,6 @@ from langchain_groq import ChatGroq
 from langchain_community.tools.tavily_search import TavilySearchResults
 
 
-
-
 load_dotenv()
 
 llm_model = ChatGroq(
@@ -19,15 +17,11 @@ llm_model = ChatGroq(
     api_key=os.getenv('GROQ_API_KEY')
 )
 
-tavily_search  = TavilySearchResults(max_results=2)
+tavily_search  = TavilySearchResults(max_results=1)
 
 def surgery_post_faq_crew(surgery_details: str, surgery_conversation: str) -> str:
     """
-    Creates a crew of agents responsible for generating comprehensive post-surgery FAQs.
-    The FAQs cover postoperative care, risks and complications, medications, recovery processes, patient condition, and general post-surgery information.
-
-    Returns:
-        str: A comprehensive post-surgery FAQ document.
+    Crew of agents responsible for generating comprehensive post-surgery FAQs.
     """
 
     # Agent Definitions
@@ -41,7 +35,7 @@ def surgery_post_faq_crew(surgery_details: str, surgery_conversation: str) -> st
             "are collected from specialized agents and compiled into a cohesive and comprehensive FAQ document."
         ),
         verbose=True,
-        allow_delegation=True  # Allows delegating tasks to specialized agents
+        allow_delegation=True
     )
 
     postoperative_care_agent = Agent(
@@ -129,7 +123,7 @@ def surgery_post_faq_crew(surgery_details: str, surgery_conversation: str) -> st
         allow_delegation=False,
     )
 
-    # Task Definitions
+    # creating tasks for the FAQ agents
 
     faq_manager_task = Task(
         description=(
@@ -221,7 +215,7 @@ def surgery_post_faq_crew(surgery_details: str, surgery_conversation: str) -> st
         description=(
             "1. Gather the FAQs from the Postoperative Care Specialist, Risks and Complications Analyst, "
             "Medications Specialist, Recovery Process Advisor, Patient Condition Analyst, and General Post-Surgery Information Expert.\n"
-            "2. Integrate these FAQs into a single, cohesive document.\n"
+            "2. Integrate atleast twenty FAQs into a single, cohesive document.\n"
             "3. Ensure that the FAQs are organized by category and formatted consistently.\n"
             "4. Review the compiled FAQs for accuracy, clarity, and comprehensiveness.\n"
             "5. Finalize the FAQ document for distribution or publication."
@@ -232,7 +226,7 @@ def surgery_post_faq_crew(surgery_details: str, surgery_conversation: str) -> st
         agent=final_faq_compiler_agent
     )
 
-    # Defining the Crew
+    # creating crew
 
     faq_crew = Crew(
         agents=[
@@ -257,14 +251,13 @@ def surgery_post_faq_crew(surgery_details: str, surgery_conversation: str) -> st
         ],
         verbose=True,
         manager_llm=llm_model,
-        process=Process.sequential  # Ensures tasks are executed in order
+        process=Process.sequential  
     )
-
     # Initializing the Crew with necessary inputs
 
     initial_inputs = {
-        'surgery_details': surgery_details,             # Detailed description of how the surgery was performed
-        'surgery_conversation': surgery_conversation    # Transcript or notes of surgeon's conversation during surgery
+        'surgery_details': surgery_details,             
+        'surgery_conversation': surgery_conversation   
     }
 
     # Executing the Crew

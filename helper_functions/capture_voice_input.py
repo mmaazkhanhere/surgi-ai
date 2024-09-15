@@ -1,9 +1,11 @@
 import streamlit as st
 import speech_recognition as sr
 
-# Function to capture voice input and return transcribed text
-# Function to capture voice input
+
 def capture_voice_input():
+    """
+    It is actively listening for voice input during surgery.
+    """
     recognizer = sr.Recognizer()
     captured_text = ""
 
@@ -26,5 +28,6 @@ def capture_voice_input():
             except sr.RequestError as e:
                 st.write(f"Could not request results from Google Speech Recognition service; {e}")
                 break
-
-    return captured_text.replace("please answer", "").strip()  # Remove 'please answer' from the captured text
+    
+    # Remove 'please answer' from the captured text
+    return captured_text.replace("please answer", "").strip()  

@@ -1,6 +1,9 @@
 import streamlit as st
 
 def display_files_in_rows(file_list, header):
+    """
+    Function for setting files in rows.
+    """
     if file_list:
         st.subheader(header)
         for i in range(0, len(file_list), 3):

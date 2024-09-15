@@ -9,12 +9,6 @@ import io
 def preprocess_image(image_bytes):
     """
     Preprocesses the image to enhance OCR accuracy.
-
-    Parameters:
-    - image_bytes (bytes): The image data in bytes.
-
-    Returns:
-    - np.ndarray: The preprocessed image as a NumPy array.
     """
     try:
         # Open the image using PIL
@@ -40,7 +34,6 @@ def preprocess_image(image_bytes):
         # Perform morphological operations to enhance text regions
         kernel = np.ones((3,3), np.uint8)
         processed = cv2.morphologyEx(thresh, cv2.MORPH_CLOSE, kernel, iterations=1)
-
         return processed
 
     except Exception as e:
@@ -56,13 +49,6 @@ def preprocess_image(image_bytes):
 def initialize_reader(languages=['en'], use_gpu=False):
     """
     Initializes the EasyOCR Reader.
-
-    Parameters:
-    - languages (list): List of language codes to use for OCR. Default is ['en'].
-    - use_gpu (bool): Whether to use GPU for OCR. Default is False.
-
-    Returns:
-    - easyocr.Reader: An instance of EasyOCR Reader.
     """
     try:
         reader = easyocr.Reader(languages, gpu=use_gpu)
@@ -74,13 +60,6 @@ def initialize_reader(languages=['en'], use_gpu=False):
 def perform_ocr(reader, image_array):
     """
     Performs OCR on the given image using the provided EasyOCR Reader.
-
-    Parameters:
-    - reader (easyocr.Reader): An initialized EasyOCR Reader instance.
-    - image_array (np.ndarray): The image data as a NumPy array.
-
-    Returns:
-    - str: The extracted text.
     """
     try:
         results = reader.readtext(image_array, detail=0, paragraph=True)
@@ -93,15 +72,6 @@ def perform_ocr(reader, image_array):
 def ocr_helper(uploaded_file, languages=['en'], preprocess=True, use_gpu=False):
     """
     Extracts text from the given image uploaded via Streamlit.
-
-    Parameters:
-    - uploaded_file (UploadedFile): The image file uploaded via Streamlit.
-    - languages (list): List of language codes to use for OCR. Default is ['en'].
-    - preprocess (bool): Whether to preprocess the image before OCR. Default is True.
-    - use_gpu (bool): Whether to use GPU for OCR. Default is False.
-
-    Returns:
-    - str: The extracted text.
     """
     try:
         # Read the uploaded file as bytes

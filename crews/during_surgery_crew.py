@@ -22,10 +22,8 @@ llm_model = ChatGoogleGenerativeAI(
 @tool
 def query_pinecone(surgeon_query: str):
     "Query pinecone database and retreive relevant information based on the query"
-
     vector_store = pinecone_vector_store()
     embedding = embeddings()
-
     knowledge = vector_store.from_existing_index(index_name="surgical-assistant",
                                                 embedding=embedding)
 
@@ -38,6 +36,7 @@ def query_pinecone(surgeon_query: str):
 
 
 def during_surgery_crew(surgeon_query: str, patient_history: str)-> str:
+    
     # defining agents of the crew
     manager_agent = Agent(llm=llm_model,
                         role="Certified Operating Room Manager",

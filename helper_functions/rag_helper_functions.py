@@ -5,6 +5,9 @@ from langchain_huggingface import HuggingFaceEmbeddings
 
 #Extract data from the PDF
 def load_pdf(data):
+    """
+    Function to load PDF.
+    """   
     loader = DirectoryLoader(data,
                     glob="*.pdf",
                     loader_cls=PyPDFLoader)
@@ -17,6 +20,9 @@ def load_pdf(data):
 
 #Create text chunks
 def text_split(extracted_data):
+    """
+    Function to split the text.
+    """
     text_splitter = RecursiveCharacterTextSplitter(chunk_size = 500, chunk_overlap = 20)
     text_chunks = text_splitter.split_documents(extracted_data)
 

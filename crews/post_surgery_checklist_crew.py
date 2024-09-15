@@ -15,23 +15,12 @@ llm_model = ChatGroq(
     temperature=0.5,
     api_key=os.getenv('GROQ_API_KEY')
 )
-
 tavily_search  = TavilySearchResults(max_results=1)
 
 
 def post_surgery_checklist_crew(surgery_details: str, surgery_conversation: str, patient_conditions: str) -> str:
     """
-    Creates a crew of agents responsible for generating a comprehensive post-surgery checklist.
-    The checklist includes wound care, medication management, activity restrictions, follow-up appointments,
-    monitoring for complications, dietary guidelines, patient education, and discharge instructions.
-    
-    Args:
-        surgery_details (str): Detailed description of how the surgery was performed.
-        surgery_conversation (str): Transcript or notes of the surgeon's conversation during surgery.
-        patient_conditions (str): Information about the patient's condition before, during, and after surgery.
-    
-    Returns:
-        str: A comprehensive post-surgery checklist document.
+    Crew of agents responsible for generating a comprehensive post-surgery checklist.
     """
 
     # Agent Definitions
@@ -45,7 +34,7 @@ def post_surgery_checklist_crew(surgery_details: str, surgery_conversation: str,
             "to specialized agents and that their outputs are compiled into a cohesive and comprehensive checklist."
         ),
         verbose=True,
-        allow_delegation=True  # Allows delegating tasks to specialized agents
+        allow_delegation=True
     )
 
     wound_care_agent = Agent(
@@ -321,15 +310,15 @@ def post_surgery_checklist_crew(surgery_details: str, surgery_conversation: str,
         ],
         verbose=True,
         manager_llm=llm_model,
-        process=Process.sequential  # Ensures tasks are executed in order
+        process=Process.sequential
     )
 
     # Initializing the Crew with necessary inputs
 
     initial_inputs = {
-        'surgery_details': surgery_details,           # Detailed description of how the surgery was performed
-        'surgery_conversation': surgery_conversation, # Transcript or notes of surgeon's conversation during surgery
-        'patient_conditions': patient_conditions      # Information about the patient's condition before, during, and after surgery
+        'surgery_details': surgery_details,           
+        'surgery_conversation': surgery_conversation, 
+        'patient_conditions': patient_conditions
     }
 
     # Executing the Crew
