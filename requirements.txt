@@ -25,6 +25,7 @@ pyaudio == 0.2.14
 vosk == 0.3.45
 pysqlite3 == 0.5.3
 pysqlite3-wheels
+
 pysqlite3-binary == 0.5.3
 setuptools == 74.0.0
 wheel == 0.44.0
