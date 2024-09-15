@@ -2,9 +2,8 @@ import os
 from dotenv import load_dotenv
 
 from crewai import Agent, Task, Crew, Process
-from crewai_tools import tool
-
-from langchain_groq import ChatGroq
+from crewai_tools import tool  # Ensure this is correctly installed and configured
+from langchain_groq import ChatGroq  # Ensure this is correctly installed and configured
 
 load_dotenv()
 
@@ -23,14 +22,14 @@ def pre_surgery_crew(
     lab_report_text: str,
     scans_text: str
 ) -> str:
-
+    # Format the strings with actual variables
     # Defining consolidated agents of the crew with updated, precise goals and backstories
 
     medications_and_prescriptions_summary_agent = Agent(
         llm=llm_model,
         role="Certified Prescription Specialist",
-        goal="Summarize current prescriptions, identify drug interactions, and recommend necessary adjustments before {surgery_name}.",
-        backstory="Analyzes the patient's prescriptions: {prescription_text} to highlight medications affecting {surgery_name} or anesthesia.",
+        goal=f"Summarize current prescriptions, identify drug interactions, and recommend necessary adjustments before {surgery_name}.",
+        backstory=f"Analyzes the patient's prescriptions: {prescription_text} to highlight medications affecting {surgery_name} or anesthesia.",
         verbose=True,
         allow_delegation=False,
     )
@@ -38,8 +37,8 @@ def pre_surgery_crew(
     test_results_analysis_agent = Agent(
         llm=llm_model,
         role="Licensed Lab Results Specialist",
-        goal="Analyze lab and scan reports to identify abnormal findings or risks for {surgery_name}.",
-        backstory="Interprets test and scan data: {lab_report_text}, {scans_text} for patient age {patient_age} relevant to {surgery_name}.",
+        goal=f"Analyze lab and scan reports to identify abnormal findings or risks for {surgery_name}.",
+        backstory=f"Interprets test and scan data: {lab_report_text}, {scans_text} for patient age {patient_age} relevant to {surgery_name}.",
         verbose=True,
         allow_delegation=False,
     )
@@ -48,12 +47,12 @@ def pre_surgery_crew(
         llm=llm_model,
         role="Certified Anesthesia and Precautions Consultant",
         goal=(
-            "Create an anesthesia plan and recommend patient-specific precautions based on age {patient_age}, "
-            "medications {prescription_text}, and test results for {surgery_name}."
+            f"Create an anesthesia plan and recommend patient-specific precautions based on age {patient_age}, "
+            f"medications {prescription_text}, and test results for {surgery_name}."
         ),
         backstory=(
-            "Develops an anesthesia strategy and evaluates patient-specific precautions considering age, "
-            "prescriptions, and test/scan findings: {lab_report_text}, {scans_text} for {surgery_name}."
+            f"Develops an anesthesia strategy and evaluates patient-specific precautions considering age, "
+            f"prescriptions, and test/scan findings: {lab_report_text}, {scans_text} for {surgery_name}."
         ),
         verbose=True,
         allow_delegation=False,
@@ -63,13 +62,13 @@ def pre_surgery_crew(
         llm=llm_model,
         role="Licensed Surgical Risk and Instruments Expert",
         goal=(
-            "Assess surgical risks and provide a comprehensive list of instruments required for {surgery_name}, "
-            "ensuring all necessary tools are available and appropriate for the procedure."
+            f"Assess surgical risks and provide a comprehensive list of instruments required for {surgery_name}, "
+            f"ensuring all necessary tools are available and appropriate for the procedure."
         ),
         backstory=(
-            "Identifies risks like bleeding or infection by reviewing age, medications, and test/scan results: "
-            "{lab_report_text}, {scans_text} for {surgery_name}. Additionally, compiles a detailed list of "
-            "surgical instruments needed for the procedure."
+            f"Identifies risks like bleeding or infection by reviewing age, medications, and test/scan results: "
+            f"{lab_report_text}, {scans_text} for {surgery_name}. Additionally, compiles a detailed list of "
+            f"surgical instruments needed for the procedure."
         ),
         verbose=True,
         allow_delegation=False,
@@ -79,12 +78,12 @@ def pre_surgery_crew(
         llm=llm_model,
         role="Chief Surgeon Advisor",
         goal=(
-            "Orchestrate the generation of a comprehensive pre-surgery report for {surgery_name} by delegating tasks to specialized agents, "
-            "collecting their responses, and compiling the final report."
+            f"Orchestrate the generation of a comprehensive pre-surgery report for {surgery_name} by delegating tasks to specialized agents, "
+            f"collecting their responses, and compiling the final report."
         ),
         backstory=(
-            "Acts as the head of the surgical crew, managing and coordinating with specialized agents to gather all necessary information "
-            "and compile a detailed pre-surgery report for {surgery_name}."
+            f"Acts as the head of the surgical crew, managing and coordinating with specialized agents to gather all necessary information "
+            f"and compile a detailed pre-surgery report for {surgery_name}."
         ),
         verbose=True,
         allow_delegation=True,  # Allows the chief surgeon agent to delegate tasks
@@ -98,8 +97,8 @@ def pre_surgery_crew(
             "2. Recommend adjustments or discontinuations necessary before the surgery."
         ),
         expected_output=(
-            "Provide a concise summary of current prescriptions, identify potential drug interactions, "
-            "and recommend necessary adjustments or discontinuations before {surgery_name}."
+            f"Provide a concise summary of current prescriptions, identify potential drug interactions, "
+            f"and recommend necessary adjustments or discontinuations before {surgery_name}."
         ),
         agent=medications_and_prescriptions_summary_agent,
     )
@@ -110,7 +109,7 @@ def pre_surgery_crew(
             "2. Highlight indicators that may pose risks during the surgery."
         ),
         expected_output=(
-            "Provide an analysis of lab and scan reports, identifying abnormal findings or risks for {surgery_name}."
+            f"Provide an analysis of lab and scan reports, identifying abnormal findings or risks for {surgery_name}."
         ),
         agent=test_results_analysis_agent,
     )
@@ -121,22 +120,22 @@ def pre_surgery_crew(
             "2. Recommend patient-specific precautions based on test and scan reports to ensure safety and efficacy."
         ),
         expected_output=(
-            "Create a tailored anesthesia plan based on age {patient_age}, medications {prescription_text}, "
-            "and test/scan findings for {surgery_name}. Recommend specific precautions to minimize potential complications."
+            f"Create a tailored anesthesia plan based on age {patient_age}, medications {prescription_text}, "
+            f"and test/scan findings for {surgery_name}. Recommend specific precautions to minimize potential complications."
         ),
         agent=anesthesia_and_precautions_advisor_agent,
     )
 
     surgical_risk_and_instruments_expert_task = Task(
         description=(
-            "1. Assess potential surgical risks such as bleeding, infection, or other complications.\n"
-            "2. Analyze the patient's age, medications, and abnormal test/scan findings to identify risks.\n"
-            "3. Provide a comprehensive list of surgical instruments required for {surgery_name}, including specifications and availability."
+            f"1. Assess potential surgical risks such as bleeding, infection, or other complications.\n"
+            f"2. Analyze the patient's age, medications, and abnormal test/scan findings to identify risks.\n"
+            f"3. Provide a comprehensive list of surgical instruments required for {surgery_name}, including specifications and availability."
         ),
         expected_output=(
-            "Assess and communicate potential surgical risks by analyzing age {patient_age}, "
-            "prescriptions {prescription_text}, and test/scan abnormalities for {surgery_name}. "
-            "Provide a detailed list of surgical instruments required, including specifications and availability."
+            f"Assess and communicate potential surgical risks by analyzing age {patient_age}, "
+            f"prescriptions {prescription_text}, and test/scan abnormalities for {surgery_name}. "
+            f"Provide a detailed list of surgical instruments required, including specifications and availability."
         ),
         agent=surgical_risk_and_instruments_expert_agent,
     )
@@ -144,17 +143,15 @@ def pre_surgery_crew(
     # Defining the compilation task handled by the chief surgeon agent
     chief_surgeon_compilation_task = Task(
         description=(
-            "1. Receive input: surgery_name: {surgery_name}, patient_age: {patient_age}, prescription_text: {prescription_text}, "
-            "lab_report_text: {lab_report_text}, scans_text: {scans_text}.\n"
+            f"1. Receive input: surgery_name: {surgery_name}, patient_age: {patient_age}, prescription_text: {prescription_text}, "
+            f"lab_report_text: {lab_report_text}, scans_text: {scans_text}.\n"
             "2. Delegate tasks to all specialized agents.\n"
             "3. Collect outputs from each agent.\n"
             "4. Synthesize the collected information into a comprehensive surgical guideline.\n"
-            "5. Iterate with agents for any clarifications or additional data if required.\n"
-            "6. Finalize and return the pre-surgery report.\n"
-            "7. Ensure that each agent is queried only once to prevent redundancy."
+            "5. Finalize and return the pre-surgery report."
         ),
         expected_output=(
-            "Compile a comprehensive pre-surgery report for {surgery_name} by integrating insights from all specialized agents."
+            f"Compile a comprehensive pre-surgery report for {surgery_name} by integrating insights from all specialized agents."
         ),
         agent=chief_surgeon_agent,
     )
@@ -177,16 +174,39 @@ def pre_surgery_crew(
         ],
         verbose=True,
         manager_llm=llm_model,
-        process=Process.sequential  # Adjust if Process.interactive is supported
+        process=Process.sequential  # Reverted to sequential due to AttributeError
     )
 
-    # Initiate the crew with all necessary inputs
-    result = surgical_crew.kickoff({
-        'surgery_name': surgery_name,
-        'patient_age': patient_age,
-        'prescription_text': prescription_text,
-        'lab_report_text': lab_report_text,
-        'scans_text': scans_text
-    })
-    
-    return result
+    try:
+        # Initiate the crew with all necessary inputs
+        result = surgical_crew.kickoff({
+            'surgery_name': surgery_name,
+            'patient_age': patient_age,
+            'prescription_text': prescription_text,
+            'lab_report_text': lab_report_text,
+            'scans_text': scans_text
+        })
+        return result
+    except Exception as e:
+        # Handle exceptions and ensure that a report is generated or an error message is returned
+        error_message = f"An error occurred during report generation: {str(e)}"
+        return error_message
+
+# Example usage
+if __name__ == "__main__":
+    surgery_name = "Knee Replacement"
+    patient_age = "65"
+    prescription_text = "Aspirin, Metformin"
+    lab_report_text = "Hemoglobin levels normal, slight elevation in liver enzymes."
+    scans_text = "X-ray shows moderate arthritis, MRI clear of major issues."
+
+    report = pre_surgery_crew(
+        surgery_name=surgery_name,
+        patient_age=patient_age,
+        prescription_text=prescription_text,
+        lab_report_text=lab_report_text,
+        scans_text=scans_text
+    )
+
+    print("Pre-Surgery Report:")
+    print(report)

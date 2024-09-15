@@ -3,13 +3,16 @@ import os
 
 from crews.during_surgery_crew import during_surgery_crew
 from crews.pre_surgery_crew import pre_surgery_crew
+from crews.post_surgery_checklist_crew import post_surgery_checklist_crew
+from crews.post_surgery_faqs_crew import surgery_post_faq_crew
+from crews.post_surgery_report_crew import operative_report_crew
+from crews.pre_surgery_crew import pre_surgery_crew
+
 from helper_functions.ocr_helper import ocr_helper
 from helper_functions.display_files_in_rows import display_files_in_rows
 from helper_functions.convert_to_pdf import convert_to_pdf
 from helper_functions.PDF_text_extractor import extract_text_from_pdf
-from crews.pre_surgery_crew import pre_surgery_crew
 from helper_functions.active_listening import active_listening
-
 from helper_functions.display_files_in_rows import display_files_in_rows
 from helper_functions.convert_to_pdf import convert_to_pdf
 
@@ -129,6 +132,7 @@ if st.session_state.active_section == "Pre Surgery Report":
 
             # Assuming CrewOutput is a class type
 
+
             output_type = pre_surgery_report
             type_as_str = str(output_type)
             
@@ -157,5 +161,153 @@ elif st.session_state.active_section == "During Surgery Voice Chat":
         
         # Start the main loop
         active_listening(patient_history)
+
+
+elif st.session_state.active_section == "Post Surgery Suggestions":
+    st.header("🩺 Post Surgery Suggestions")
+
+    # Using Tabs for better organization
+    tabs = st.tabs(["📄 Report", "❓ FAQs", "✅ Checklist"])
+        
+    # **1. Post-Surgery Checklist**
+    with tabs[0]:
+        st.subheader("Post-Surgery Checklist")
+        st.write("<h6>Our crew of AI Agents will create a post surgery report for speedy recovery</h6>", unsafe_allow_html=True)
+
+        
+        st.write("<h5></h5>", unsafe_allow_html=True)
+        surgery_details_file = st.file_uploader('Upload surgery detail report',
+                                type=["pdf"], 
+                                accept_multiple_files=False)
+        
+        st.write("<h5></h5>", unsafe_allow_html=True)
+        surgeon_conversation_file = st.file_uploader("Upload Surgeon Conversations during Surgery",
+                                                type=['pdf'],
+                                                accept_multiple_files=False)
+        
+        st.write("<h5></h5>", unsafe_allow_html=True)
+        patient_condition_file =  st.file_uploader("Upload patient condition report",
+                                            type=['pdf'],
+                                            accept_multiple_files=False)
+
+        btn = st.button('Generate Report')
+
+        if btn: 
+            if surgery_details_file and surgeon_conversation_file and patient_condition_file:
+                surgery_details = extract_text_from_pdf(surgery_details_file)
+                surgeon_conversation = extract_text_from_pdf(surgeon_conversation_file)
+                patient_conditions = extract_text_from_pdf(patient_condition_file)
+
+                response = operative_report_crew(surgery_details, surgeon_conversation, patient_conditions)
+                st.write(response)
+
+                # Download PDF Button
+                if st.button("Download Checklist PDF"):
+
+                    pdf_bytes = convert_to_pdf(response)
+                    st.download_button(
+                        label="📥 Download PDF Report",
+                        data=pdf_bytes,
+                        file_name="post_surgery_report.pdf",
+                        mime="application/pdf",
+                    )
+            else:
+                st.error('Upload all files')
+
+    # **2. Post-Surgery FAQs**
+    with tabs[1]:
+        st.subheader("Post Surgery FAQs")
+        st.write("<h6>Our crew of AI Agents will create FAQs that will help patient in recovery</h6>", unsafe_allow_html=True)
+        # Download PDF Button
+
+        st.write("<h5></h5>", unsafe_allow_html=True)
+        surgery_details_file = st.file_uploader('Upload surgery detail file',
+                                type=["pdf"], 
+                                accept_multiple_files=False)
+        
+        st.write("<h5></h5>", unsafe_allow_html=True)
+        surgeon_conversation_file = st.file_uploader("Upload surgeon conversations",
+                                                type=['pdf'],
+                                                accept_multiple_files=False)
+        
+        btn = st.button('Generate FAQ')
+
+        if btn:
+
+            if surgery_details_file and surgeon_conversation_file: 
+        
+                surgery_details = extract_text_from_pdf(surgery_details_file)
+                surgeon_conversation = extract_text_from_pdf(surgeon_conversation_file)
+                
+                
+                response = surgery_post_faq_crew(surgery_details, surgeon_conversation)
+                st.write(response)
+                
+                if st.button("Download FAQs PDF"):
+                    pdf_bytes = convert_to_pdf(response)
+                    st.download_button(
+                        label="📥 Download FAQs PDF",
+                        data=pdf_bytes,
+                        file_name="post_surgery_faqs.pdf",
+                        mime="application/pdf",
+                    )
+            else:
+                st.error('Upload all files')
+
+
+    # **3. Post-Surgery Report**
+    with tabs[2]:
+        st.write("<h5></h5>", unsafe_allow_html=True)
+        surgery_details_file = st.file_uploader('Upload surgery details',
+                                type=["pdf"], 
+                                accept_multiple_files=False)
+        
+        st.write("<h5></h5>", unsafe_allow_html=True)
+        surgeon_conversation_file = st.file_uploader("Upload Surgeon Conversations",
+                                                type=['pdf'],
+                                                accept_multiple_files=False)
+        
+        st.write("<h5></h5>", unsafe_allow_html=True)
+        patient_condition_file =  st.file_uploader("Patient condition report",
+                                            type=['pdf'],
+                                            accept_multiple_files=False)
+
+        btn = st.button('Generate Checklist')
+
+        if btn: 
+            if surgery_details_file and surgeon_conversation_file and patient_condition_file:
+                surgery_details = extract_text_from_pdf(surgery_details_file)
+                surgeon_conversation = extract_text_from_pdf(surgeon_conversation_file)
+                patient_conditions = extract_text_from_pdf(patient_condition_file)
+
+                response = post_surgery_checklist_crew(surgery_details, surgeon_conversation, patient_conditions)
+                st.write(response)
+
+                # Download PDF Button
+                if st.button("Download Checklist PDF"):
+
+                    pdf_bytes = convert_to_pdf(response)
+                    st.download_button(
+                        label="📥 Download Checklist PDF",
+                        data=pdf_bytes,
+                        file_name="post_surgery_checklist.pdf",
+                        mime="application/pdf",
+                    )
+            else:
+                st.error('Upload all files')
+
+    # Optional: Footer or additional information
+    st.markdown("---")
+    st.caption("If you have any further questions or need assistance, our support team is here to help.")
+
+elif st.session_state.active_section == "About":
+    st.header("About SurgiAI")
+    st.write("""
+        SurgiAI is a revolutionary AI-powered application designed to assist surgeons with pre-surgery reporting, 
+        intra-surgery communication, and post-surgery suggestions. It provides a seamless and efficient solution to 
+        streamline surgical procedures and documentation.
+    """)
+    st.write("<h6>Developed by GenAgents.</h6>", unsafe_allow_html=True)
+
 
             
