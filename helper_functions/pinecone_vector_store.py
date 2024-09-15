@@ -9,6 +9,9 @@ from pinecone import Pinecone
 load_dotenv()
 
 def pinecone_vector_store():
+    """
+    Setting API key.
+    """
     pinecone_api_key = os.environ.get("PINECONE_API_KEY")
     pc = Pinecone(api_key=pinecone_api_key)
     index_name = "surgical-assistant"

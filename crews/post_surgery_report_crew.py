@@ -22,8 +22,7 @@ def operative_report_crew(surgery_details: str, surgeon_conversation: str, patie
     The report includes preoperative and postoperative diagnoses, patient condition after surgery, and all medications used during the procedure.
     """
 
-    # Agent Definitions
-
+    # defining agents
     report_manager_agent = Agent(
         llm=llm_model,
         role="Operative Report Manager",
@@ -84,8 +83,7 @@ def operative_report_crew(surgery_details: str, surgeon_conversation: str, patie
         allow_delegation=False,
     )
 
-    # Task Definitions
-
+    # defining tasks
     report_manager_task = Task(
         description=(
             "1. Initiate the operative report generation process using the provided surgery details {surgery_details}, notes, and patient information.\n"
@@ -156,8 +154,7 @@ def operative_report_crew(surgery_details: str, surgeon_conversation: str, patie
         agent=final_report_agent
     )
 
-    # Defining the Crew
-
+    # creating crew
     operative_crew = Crew(
         agents=[
             report_manager_agent,
@@ -175,15 +172,14 @@ def operative_report_crew(surgery_details: str, surgeon_conversation: str, patie
         ],
         verbose=True,
         manager_llm=llm_model,
-        process=Process.sequential  # Ensures tasks are executed in order
+        process=Process.sequential  
     )
 
     # Initializing the Crew with necessary inputs
-
     initial_inputs = {
-        'surgery_details': surgery_details,   # Detailed description of how the surgery was performed
-        'surgeon_conversation': surgeon_conversation,       # Notes and observations made during surgery
-        'patient_condition': patient_condition          # Comprehensive patient information and history
+        'surgery_details': surgery_details,   
+        'surgeon_conversation': surgeon_conversation,      
+        'patient_condition': patient_condition          
     }
 
     # Executing the Crew

@@ -1,8 +1,11 @@
 import streamlit as st
 import base64
 
-# Function to play audio without autoplay using HTML
+
 def play_audio(audio_data):
+    """
+    Function to play audio without autoplay using HTML.
+    """
     audio_data.seek(0)  # Ensure we are at the beginning of the BytesIO buffer
     audio_bytes = audio_data.read()
     b64 = base64.b64encode(audio_bytes).decode()

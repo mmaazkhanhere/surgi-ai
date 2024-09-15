@@ -3,8 +3,11 @@ from vosk import Model, KaldiRecognizer
 import pyaudio
 import json
 
-# Function to detect voice input and handle session closing based on "that's it"
+
 def listen_and_detect():
+    """
+    Function to detect voice input and handle session closing based on "that's it".
+    """    
     vosk_model = Model(r"vosk-model-small-en-us-0.15")
     rec = KaldiRecognizer(vosk_model, 16000)
     audio = pyaudio.PyAudio()
