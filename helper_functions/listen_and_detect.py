@@ -24,6 +24,7 @@ def listen_and_detect():
                 return "question"
             if "that's it" in text.lower():
                 st.write("Session closure detected. Ending session...")
+
                 return "exit"
         else:
             continue
