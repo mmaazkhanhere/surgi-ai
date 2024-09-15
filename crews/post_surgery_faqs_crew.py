@@ -21,7 +21,6 @@ llm_model = ChatGroq(
 
 tavily_search  = TavilySearchResults(max_results=2)
 
-
 def surgery_post_faq_crew(surgery_details: str, surgery_conversation: str) -> str:
     """
     Creates a crew of agents responsible for generating comprehensive post-surgery FAQs.
