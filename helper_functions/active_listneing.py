@@ -2,10 +2,11 @@ import streamlit as st
 from helper_functions.listen_and_detect import listen_and_detect
 from helper_functions.play_audio import play_audio
 from helper_functions.text_to_speech import text_to_speech
+from helper_functions.convert_to_pdf import convert_to_pdf
 from helper_functions.capture_voice_input import capture_voice_input
 from crews.during_surgery_crew import during_surgery_crew
 from langchain.schema import HumanMessage, AIMessage
-def main_loop(patient_history):
+def active_listneing(patient_history):
             if "messages" not in st.session_state:
                 st.session_state.messages = []
 
@@ -47,3 +48,16 @@ def main_loop(patient_history):
                         response_audio = text_to_speech(ai_message.content)
                         audio_bytes = response_audio.read()
                         st.audio(audio_bytes, format="audio/mp3", autoplay=True)
+                elif detected_action == "exit":
+                    # Save the chat history to PDF
+                    type_as_str = str(st.session_state.messages)
+                    report_pdf_conversion = convert_to_pdf(type_as_str)
+
+                    st.download_button(
+                        label="Download during surgery Report",
+                        data=report_pdf_conversion,
+                        file_name="during_surgery_conversation.pdf",
+                        mime="application/pdf"
+                    )                   
+                    
+                    break 
