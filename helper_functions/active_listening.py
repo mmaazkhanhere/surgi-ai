@@ -4,7 +4,6 @@ from crews.during_surgery_crew import during_surgery_crew
 from langchain.schema import HumanMessage, AIMessage
 
 from helper_functions.listen_and_detect import listen_and_detect
-from helper_functions.play_audio import play_audio
 from helper_functions.text_to_speech import text_to_speech
 from helper_functions.convert_to_pdf import convert_to_pdf
 from helper_functions.capture_voice_input import capture_voice_input

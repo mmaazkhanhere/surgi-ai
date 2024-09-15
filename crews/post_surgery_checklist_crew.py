@@ -1,6 +1,5 @@
 import os
 from dotenv import load_dotenv
-from typing import List
 
 from crewai import Agent, Task, Crew, Process
 
