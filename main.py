@@ -125,7 +125,8 @@ if st.session_state.active_section == "Pre Surgery Report":
                 scan_text += extract_text_from_pdf(file) + "\n\n\n\n"
 
             
-            pre_surgery_report= pre_surgery_crew(surgery_name, patient_age , prescription_text, lab_report_text,scan_text)
+            pre_surgery_report= pre_surgery_report_crew(surgery_name, patient_age , prescription_text, lab_report_text,scan_text)
+            st.write(pre_surgery_report)
 
             # Todo: Get response from AI and assign to response variable
             st.success("Report generated successfully!")
