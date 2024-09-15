@@ -8,6 +8,7 @@ from helper_functions.display_files_in_rows import display_files_in_rows
 from helper_functions.convert_to_pdf import convert_to_pdf
 from helper_functions.PDF_text_extractor import extract_text_from_pdf
 from crews.pre_surgery_crew import pre_surgery_crew
+from helper_functions.main_loop import main_loop
 
 from helper_functions.display_files_in_rows import display_files_in_rows
 from helper_functions.convert_to_pdf import convert_to_pdf
@@ -42,6 +43,8 @@ if st.session_state.active_section == "Pre Surgery Report":
     
     # Input Surgery Name
     surgery_name = st.text_input("Surgery Name", placeholder="Enter surgery name")
+    patient_name = st.text_input("Surgery Name", placeholder="Enter patient name")
+    patient_age = st.text_input("Surgery Name", placeholder="Enter patient age")
 
     # Patient history
     
@@ -98,7 +101,6 @@ if st.session_state.active_section == "Pre Surgery Report":
                         try:
                             text = extract_text_from_pdf(uploaded_file)
                             prescription_text += text + "\n\n\n\n"
-                            st.success(f"Extracted text from PDF: {filename}")
                         except Exception as e:
                             st.error(f"Failed to extract PDF: {filename}. Error: {e}")
                     elif ext in {'.png', '.jpg', '.jpeg', '.tiff', '.bmp', '.gif'}:
@@ -119,7 +121,7 @@ if st.session_state.active_section == "Pre Surgery Report":
                 scan_text += extract_text_from_pdf(file) + "\n\n\n\n"
 
             
-            pre_surgery_report= pre_surgery_crew(surgery_name, "56" , prescription_text, lab_report_text,scan_text)
+            pre_surgery_report= pre_surgery_crew(surgery_name, patient_age , prescription_text, lab_report_text,scan_text)
 
             # Todo: Get response from AI and assign to response variable
             st.success("Report generated successfully!")
@@ -138,4 +140,22 @@ if st.session_state.active_section == "Pre Surgery Report":
                 file_name="pre_surgery_report.pdf",
                 mime="application/pdf"
             )
+elif st.session_state.active_section == "During Surgery Voice Chat":
+    st.header("During Surgery Voice Chat")
+    st.write("<h6>Our crew of AI Agents will guide you during the surgery and answer your queries</h6>", unsafe_allow_html=True)
+
+    st.write("<h3></h3>", unsafe_allow_html=True)
+    patient_history_file = st.file_uploader('Upload Pre-Surgery report',
+                            type=["pdf"], 
+                            accept_multiple_files=False)
+
+
+    if patient_history_file:
+
+        # Convert the report to text
+        patient_history = extract_text_from_pdf(patient_history_file)
+        
+        # Start the main loop
+        main_loop(patient_history)
+
             

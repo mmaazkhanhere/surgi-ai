@@ -70,6 +70,35 @@ def pre_surgery_crew(
         verbose=True,
         allow_delegation=False,
     )
+    instruments_expert_agent = Agent(
+    llm=llm_model,
+    role="Surgical Instruments Specialist",
+    goal=(
+        "Provide a comprehensive list and specifications of instruments required for {surgery_name}, ensuring all necessary tools "
+        "are available and appropriate for the procedure."
+    ),
+    backstory=(
+        "An expert in selecting and detailing the surgical instruments needed for specific surgeries. Reviews the requirements of "
+        "{surgery_name} to ensure that all instruments are suitable and available."
+    ),
+    verbose=True,
+    allow_delegation=False,
+)
+
+    surgery_procedure_expert_agent = Agent(
+    llm=llm_model,
+    role="Surgery Procedure Specialist",
+    goal=(
+        "Outline the step-by-step surgical procedure for {surgery_name}, including key techniques, considerations, and best practices "
+        "to ensure a successful operation."
+    ),
+    backstory=(
+        "Specializes in defining and detailing the surgical procedure for {surgery_name}. Provides a clear and comprehensive step-by-step guide "
+        "to assist in the preparation and execution of the surgery."
+    ),
+    verbose=True,
+    allow_delegation=False,
+)
 
     chief_surgeon_agent = Agent(
         llm=llm_model,
@@ -157,16 +186,46 @@ def pre_surgery_crew(
         ),
         agent=surgical_risk_analysis_agent,
     )
+    instruments_expert_task = Task(
+    description=(
+        "1. Receive input: surgery_name, surgery_type, patient_medical_history.\n"
+        "2. Pass the relevant data to instruments_expert_agent.\n"
+        "3. Compile a comprehensive list of surgical instruments required for {surgery_name}, "
+        "including specifications and usage instructions.\n"
+        "4. Highlight any specialized or uncommon instruments necessary for the procedure.\n"
+        "5. Ensure all listed instruments are available and in proper working condition."
+    ),
+    expected_output=(
+        "Provide a detailed list of surgical instruments required for {surgery_name}, including specifications, usage instructions, "
+        "and availability status. Highlight any specialized or uncommon instruments necessary for the procedure."
+    ),
+    agent=instruments_expert_agent,
+)
 
+    surgery_procedure_expert_task = Task(
+    description=(
+        "1. Receive input: surgery_name, patient_condition, instruments_list.\n"
+        "2. Pass the relevant data to surgery_procedure_expert_agent.\n"
+        "3. Develop a step-by-step outline of the surgical procedure for {surgery_name}.\n"
+        "4. Incorporate key techniques, best practices, and safety considerations into each step.\n"
+        "5. Finalize the surgery flow to ensure efficiency and minimize risks."
+    ),
+    expected_output=(
+        "Provide a comprehensive, step-by-step outline of the surgical procedure for {surgery_name}, "
+        "including key techniques, best practices, and safety considerations to ensure an efficient and safe operation."
+    ),
+    agent=surgery_procedure_expert_agent,
+)
     # Defining the compilation task handled by the chief surgeon agent
     chief_surgeon_compilation_task = Task(
         description=(
-            "1. Receive input: surgery_name, patient_age, prescription_text, lab_report_text, scans_text.\n"
+            "1. Receive input: surgery_name: {surgery_name}, patient_age:{patient_age}, prescription_text:{prescription_text}, lab_report_text={lab_report_text}, scans_text={scans_text}.\n"
             "2. Delegate tasks to all specialized agents.\n"
             "3. Collect outputs from each agent.\n"
             "4. Synthesize the collected information into a comprehensive surgical guideline.\n"
             "5. Iterate with agents for any clarifications or additional data if required.\n"
             "6. Finalize and return the pre-surgery report."
+            "7. One question should not be asked more than once from same agent."
         ),
         expected_output=(
             "Compile a comprehensive pre-surgery report for {surgery_name} by integrating insights from all specialized agents."
@@ -177,24 +236,26 @@ def pre_surgery_crew(
     # Defining the crew with the chief surgeon agent as the manager
     surgical_crew = Crew(
         agents=[
-            chief_surgeon_agent,  # Manager agent
             medications_and_prescriptions_summary_agent,
             test_results_analysis_agent,
             anesthesia_plan_advisor_agent,
-            patient_specific_precaution_agent,
-            surgical_risk_analysis_agent
+            surgery_procedure_expert_agent, 
+            surgical_risk_analysis_agent, 
+            instruments_expert_agent,
+            chief_surgeon_agent  # Manager agent
         ],
         tasks=[
             medications_and_prescriptions_summary_task,
             test_results_analysis_task,
             anesthesia_plan_advisor_task,
-            patient_specific_precaution_task,
+            surgery_procedure_expert_task,
             surgical_risk_analysis_task,
+            instruments_expert_task, 
             chief_surgeon_compilation_task  # Only the compilation task is initiated by the chief surgeon
         ],
         verbose=True,
         manager_llm=llm_model,
-        process=Process.sequential  # Adjust if Process.interactive is supported
+        process=Process.hierarchical  # Adjust if Process.interactive is supported
     )
 
     # Initiate the crew with all necessary inputs
