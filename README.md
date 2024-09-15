@@ -1,4 +1,4 @@
-# <div align="center">🩺 AI Surgical Assistant</div>
+# <div align="center"><a href="https://surgi-ai.streamlit.app/">🩺 AI Surgical Assistant</a></div>
 
 <div align="center">
   Revolutionizing surgery with real-time AI-powered guidance and automation.
@@ -15,6 +15,9 @@
 
 ---
 
+> **Note:** Streamlit Cloud doesn't support real time voice listening. To experience during surgery voice chat, clone and run it locally
+
+---
 ## <a name="overview"></a> 📝 Overview
 
 The **AI Surgical Assistant** is an innovative AI-powered system designed to assist surgeons throughout the entire surgical process: **pre-surgery**, **during surgery**, and **post-surgery**. It provides real-time guidance, automates critical tasks like report generation, and reduces the risks of surgical errors through voice-activated commands.
@@ -52,13 +55,12 @@ Surgeons can interact with the system using customizable wake-up phrases and rec
 The AI Surgical Assistant is built using cutting-edge technologies:
 
 - **Programming Language**: Python
-- **Frontend**: HTML, CSS
-- **Backend Framework**: Flask
+- **Frontend**: Streamlit (Python)
+- **Backend Framework**: Python
 - **AI Model**: LangChain, LLaMA 2, CrewAI Agents
 - **Vector Database**: Pinecone
-- **Natural Language Processing**: Google Gemini Pro (LLM), Google’s embedding-001 model
 - **Report Generation**: AI-powered automation based on patient data and surgery details
-- **Deployment**: IBM watsonx Granite Model
+- **Deployment**: Streamlit Cloud
 
 ---
 
@@ -68,18 +70,18 @@ To get started with the AI Surgical Assistant:
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/AI-Surgical-Assistant.git
-2. Navigate to the project directory:
-   ```bash
-   cd AI-Surgical-Assistant
-3. Install the required dependencies:
+   git clone https://github.com/mmaazkhanhere/surgi-ai.git
+2. Install the required dependencies:
    ```bash
    pip install -r requirements.txt
+3. Add environment variables. Contact us to share relevant env variables
+
 4. Run the application:
    ```bash
-   python app.py
+   streamlit run main.py
+   
    
 ## <a name="usage"></a> 🚀 Usage
 1. Use the customizable voice commands like "I have a question" to activate the system during surgery.
 2. Query the AI assistant for real-time answers and guidance throughout the surgical procedure.
-3. Automatically generate both pre- and post-surgery reports based on real-time data and feedback.
+3. Automatically generate both pre and post surgery reports based on real-time data and feedback.
