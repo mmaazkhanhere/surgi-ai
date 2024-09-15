@@ -2,12 +2,11 @@ import streamlit as st
 import os
 
 from crews.during_surgery_crew import during_surgery_crew
-from crews.pre_surgery_crew import pre_surgery_crew
 from helper_functions.ocr_helper import ocr_helper
 from helper_functions.display_files_in_rows import display_files_in_rows
 from helper_functions.convert_to_pdf import convert_to_pdf
-from helper_functions.PDF_text_extractor import extract_text_from_pdf
-from crews.pre_surgery_crew import pre_surgery_crew
+from helper_functions.pdf_text_extractor import extract_text_from_pdf
+from crews.pre_surgery_crew import pre_surgery_report_crew
 
 from helper_functions.active_listening import active_listening
 
@@ -124,7 +123,8 @@ if st.session_state.active_section == "Pre Surgery Report":
                 scan_text += extract_text_from_pdf(file) + "\n\n\n\n"
 
             
-            pre_surgery_report= pre_surgery_crew(surgery_name, patient_age , prescription_text, lab_report_text,scan_text)
+            pre_surgery_report= pre_surgery_report_crew(surgery_name, patient_age , prescription_text, lab_report_text,scan_text)
+            st.write(pre_surgery_report)
 
             # Todo: Get response from AI and assign to response variable
             st.success("Report generated successfully!")
