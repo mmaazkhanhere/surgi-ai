@@ -9,7 +9,7 @@ from helper_functions.convert_to_pdf import convert_to_pdf
 from helper_functions.PDF_text_extractor import extract_text_from_pdf
 from crews.pre_surgery_crew import pre_surgery_crew
 
-from helper_functions.active_listneing import active_listneing
+from helper_functions.active_listening import active_listening
 
 
 from helper_functions.display_files_in_rows import display_files_in_rows
@@ -45,9 +45,9 @@ if st.session_state.active_section == "Pre Surgery Report":
     
     # Input Surgery Name
     surgery_name = st.text_input("Surgery Name", placeholder="Enter surgery name")
-
     patient_name = st.text_input("Patient Name", placeholder="Enter patient name")
-    patient_age = st.text_input("Patient Age", placeholder="Enter patient age")
+    patient_age = st.text_input("Patient age", placeholder="Enter patient age")
+
 
     # Patient history
     
@@ -160,5 +160,5 @@ elif st.session_state.active_section == "During Surgery Voice Chat":
         
         # Start the main loop
 
-        active_listneing(patient_history)
+        active_listening(patient_history)
 
