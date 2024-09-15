@@ -49,31 +49,6 @@ def surgery_post_faq_crew(surgery_details: str, surgery_conversation: str) -> st
         allow_delegation=False,
     )
 
-    risks_complications_agent = Agent(
-        llm=llm_model,
-        role="Risks and Complications Analyst",
-        goal="Generate and answer FAQs about the risks and potential complications associated with surgeries.",
-        backstory=(
-            "This agent focuses on identifying and explaining the risks and possible complications that may arise after surgery, "
-            "providing clear and informative responses to common concerns. It draws insights from surgery details and conversations to address real-world issues encountered during the procedure."
-        ),
-        verbose=True,
-        allow_delegation=False,
-    )
-
-    medications_agent = Agent(
-        llm=llm_model,
-        role="Medications Specialist",
-        goal="Generate and answer FAQs about medications used during and after surgical procedures.",
-        backstory=(
-            "This agent specializes in medications related to surgery, including pain management and preventive antibiotics. "
-            "It formulates questions and provides detailed answers about medication types, dosages, administration times, and potential side effects, incorporating specifics from the surgery details and surgeon's notes."
-        ),
-        verbose=True,
-        allow_delegation=False,
-        tools=[tavily_search]
-    )
-
     recovery_process_agent = Agent(
         llm=llm_model,
         role="Recovery Process Advisor",
@@ -81,18 +56,6 @@ def surgery_post_faq_crew(surgery_details: str, surgery_conversation: str) -> st
         backstory=(
             "This agent focuses on the recovery phase post-surgery, creating questions and answers about timelines, physical therapy, lifestyle adjustments, "
             "and strategies to promote optimal healing. It leverages surgery details and surgeon conversations to provide realistic and practical guidance."
-        ),
-        verbose=True,
-        allow_delegation=False,
-    )
-
-    patient_condition_agent = Agent(
-        llm=llm_model,
-        role="Patient Condition Analyst",
-        goal="Generate and answer FAQs about assessing and documenting patient condition after surgery.",
-        backstory=(
-            "This agent specializes in assessing patient status post-surgery, providing questions and answers related to vital signs, recovery progress, "
-            "and immediate post-operative observations. It uses surgery details and surgeon conversations to ensure the FAQs address actual patient conditions encountered."
         ),
         verbose=True,
         allow_delegation=False,
@@ -150,30 +113,6 @@ def surgery_post_faq_crew(surgery_details: str, surgery_conversation: str) -> st
         agent=postoperative_care_agent
     )
 
-    risks_complications_task = Task(
-        description=(
-            "1. Generate common questions about the risks and potential complications after surgery, informed by the surgery details {surgery_details} and conversation {surgery_conversation}.\n"
-            "2. Provide clear and honest answers outlining possible risks, their likelihood, and management strategies.\n"
-            "3. Ensure transparency to help patients make informed decisions."
-        ),
-        expected_output=(
-            "A set of well-formulated questions and answers concerning post-surgery risks and complications."
-        ),
-        agent=risks_complications_agent
-    )
-
-    medications_task = Task(
-        description=(
-            "1. Generate common questions about medications used during and after surgical procedures, based on the surgery details {surgery_details} and conversation {surgery_conversation}.\n"
-            "2. Provide detailed answers covering types of medications, dosages, administration times, and potential side effects.\n"
-            "3. Ensure the information is accurate and easily understandable for patients."
-        ),
-        expected_output=(
-            "A set of well-formulated questions and answers related to post-surgery medications."
-        ),
-        agent=medications_agent
-    )
-
     recovery_process_task = Task(
         description=(
             "1. Generate common questions about the recovery and rehabilitation process following surgery, utilizing the surgery details {surgery_details} and conversation {surgery_conversation}.\n"
@@ -184,18 +123,6 @@ def surgery_post_faq_crew(surgery_details: str, surgery_conversation: str) -> st
             "A set of well-formulated questions and answers regarding the recovery process."
         ),
         agent=recovery_process_agent
-    )
-
-    patient_condition_task = Task(
-        description=(
-            "1. Generate common questions about assessing and documenting patient condition after surgery, informed by the surgery details {surgery_details} and conversation {surgery_conversation}.\n"
-            "2. Provide detailed answers related to vital signs, recovery progress, and immediate post-operative observations.\n"
-            "3. Ensure the information is clear and informative for patients and caregivers."
-        ),
-        expected_output=(
-            "A set of well-formulated questions and answers concerning patient condition post-surgery."
-        ),
-        agent=patient_condition_agent
     )
 
     general_information_task = Task(
@@ -231,20 +158,14 @@ def surgery_post_faq_crew(surgery_details: str, surgery_conversation: str) -> st
         agents=[
             faq_manager_agent,
             postoperative_care_agent,
-            risks_complications_agent,
-            medications_agent,
             recovery_process_agent,
-            patient_condition_agent,
             general_information_agent,
             final_faq_compiler_agent
         ],
         tasks=[
             faq_manager_task,
             postoperative_care_task,
-            risks_complications_task,
-            medications_task,
             recovery_process_task,
-            patient_condition_task,
             general_information_task,
             final_faq_compiler_task
         ],

@@ -113,7 +113,7 @@ if st.session_state.active_section == "Pre Surgery Report":
             for file in scan_files:
                 scan_text += extract_text_from_pdf(file) + "\n\n\n\n"
             pre_surgery_report= pre_surgery_report_crew(surgery_name, patient_age , prescription_text, lab_report_text,scan_text)
-            st.write(pre_surgery_report)
+            
             
             output_type = pre_surgery_report
             type_as_str = str(output_type)
@@ -179,8 +179,8 @@ elif st.session_state.active_section == "Post Surgery Suggestions":
                 surgeon_conversation = extract_text_from_pdf(surgeon_conversation_file)
                 patient_conditions = extract_text_from_pdf(patient_condition_file)
                 response = operative_report_crew(surgery_details, surgeon_conversation, patient_conditions)
-                st.write(response)
-                pdf_bytes = convert_to_pdf(response)
+                reprot_as_str = str(response)
+                pdf_bytes = convert_to_pdf(reprot_as_str)
                 download = st.download_button(
                     label="📥 Download PDF Report",
                     data=pdf_bytes,
@@ -212,8 +212,8 @@ elif st.session_state.active_section == "Post Surgery Suggestions":
                 surgery_details = extract_text_from_pdf(surgery_details_file)
                 surgeon_conversation = extract_text_from_pdf(surgeon_conversation_file)
                 response = surgery_post_faq_crew(surgery_details, surgeon_conversation)
-                st.write(response)
-                pdf_bytes = convert_to_pdf(response)
+                FAQs_as_str = str(response)
+                pdf_bytes = convert_to_pdf(FAQs_as_str)
                 faq_download = st.download_button(
                                                     label="📥 Download FAQs PDF",
                                                     data=pdf_bytes,
@@ -247,8 +247,8 @@ elif st.session_state.active_section == "Post Surgery Suggestions":
                 surgeon_conversation = extract_text_from_pdf(surgeon_conversation_file)
                 patient_conditions = extract_text_from_pdf(patient_condition_file)
                 response = post_surgery_checklist_crew(surgery_details, surgeon_conversation, patient_conditions)
-                st.write(response)
-                pdf_bytes = convert_to_pdf(response)
+                checklist_as_str = str(response)
+                pdf_bytes = convert_to_pdf(checklist_as_str)
                 checklist_download = st.download_button(
                     label="📥 Download Checklist PDF",
                     data=pdf_bytes,
