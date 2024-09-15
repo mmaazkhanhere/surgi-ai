@@ -23,9 +23,5 @@ reportlab == 4.2.2
 beautifulsoup4 == 4.12.3
 pyaudio == 0.2.14
 vosk == 0.3.45
-# pysqlite3 == 0.5.3
-# pysqlite3-binary == 0.5.3
-# setuptools == 74.0.0
-# wheel == 0.44.0
 chromadb == 0.4.24
 numpy == 1.26.4
