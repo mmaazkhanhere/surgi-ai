@@ -24,7 +24,7 @@ def listen_and_detect():
                 return "question"
             if "that's it" in text.lower():
                 st.write("Session closure detected. Ending session...")
-                st.stop()  # End the Streamlit session
+
                 return "exit"
         else:
             continue

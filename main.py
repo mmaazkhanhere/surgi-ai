@@ -49,6 +49,7 @@ if st.session_state.active_section == "Pre Surgery Report":
     patient_name = st.text_input("Patient Name", placeholder="Enter patient name")
     patient_age = st.text_input("Patient age", placeholder="Enter patient age")
 
+
     # Patient history
     
     st.write("<h3></h3>", unsafe_allow_html=True)
@@ -160,6 +161,7 @@ elif st.session_state.active_section == "During Surgery Voice Chat":
         patient_history = extract_text_from_pdf(patient_history_file)
         
         # Start the main loop
+
         active_listening(patient_history)
 
 
