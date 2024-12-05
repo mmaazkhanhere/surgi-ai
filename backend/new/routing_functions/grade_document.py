@@ -1,3 +1,22 @@
+import os
+from dotenv import load_dotenv
+
+from langchain_groq import ChatGroq
+from langchain_core.prompts import PromptTemplate
+
+from state import State, Grade
+
+load_dotenv()
+
+model = ChatGroq(
+    model="llama-3.1-70b-versatile",
+    verbose=True,
+    temperature=0.5,
+    api_key=os.getenv("GROQ_API_KEY")
+)
+
+structure_model = model.with_structured_output(Grade)
+
 def grade_document(state: State):
   print("---CHECK RELEVANCE---")
   # Prompt
