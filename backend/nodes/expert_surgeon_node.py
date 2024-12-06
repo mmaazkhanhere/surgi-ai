@@ -26,25 +26,10 @@ def query_database(surgeon_query: str):
   retrieved_information = retriever.invoke(surgeon_query)
   return retrieved_information
 
-@tool
-def query_database(surgeon_query: str):
-  """Query the pinecone database for the surgeon query"""
-  print("Query database")
-  pinecone_api_key = os.getenv('PINECONE_API_KEY')
-  pc = Pinecone(api_key=pinecone_api_key)
-  index_name = "surgical-assistant"
-  index = pc.Index(index_name)
-  embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-mpnet-base-v2")
-  vector_store = PineconeVectorStore(index=index, embedding=embeddings)
-  retriever = vector_store.as_retriever()
-  retrieved_information = retriever.invoke(surgeon_query)
-  return retrieved_information
-
 tools = [query_database]
 
 model = ChatGroq(
     model="llama-3.1-70b-versatile",
-    verbose=True,
     temperature=0.5,
     api_key=os.getenv("GROQ_API_KEY")
 )
@@ -55,7 +40,6 @@ def expert_surgeon_node(state: State):
 
   print("Expert Surgeon")
   surgeon_query: str = state['surgeon_query']
-  insight_accumulator_response: str = state['insight_accumulator_response']
   patient_history: str = state['patient_history']
 
   instructions = """

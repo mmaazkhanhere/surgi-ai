@@ -9,8 +9,7 @@ from state import State
 load_dotenv()
 
 model = ChatGroq(
-    model="llama-3.1-70b-versatile",
-    verbose=True,
+    model="llama-3.2-1b-preview",
     temperature=0.5,
     api_key=os.getenv("GROQ_API_KEY")
 )

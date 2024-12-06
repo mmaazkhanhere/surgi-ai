@@ -1,9 +1,12 @@
 import axios from "axios";
 
-export async function duringSurgery(query: string, patient_history: string) {
+export async function duringSurgery(
+  surgeon_query: string,
+  patient_history: string
+) {
   try {
     const response = await axios.post(`http://localhost:8000/surgery`, {
-      query,
+      surgeon_query,
       patient_history,
     });
 
