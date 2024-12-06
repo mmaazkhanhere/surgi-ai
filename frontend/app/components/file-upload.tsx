@@ -1,39 +1,57 @@
 "use client";
 import React, { useState } from "react";
-import { preSurgeryMedicine } from "../actions/medicine-upload";
+import { preSurgeryMedicine } from "@/app/actions/medicine-upload";
+import { preSurgeryLabReports } from "@/app/actions/lab-report-upload";
+import { preSurgeryScans } from "@/app/actions/scan-upload";
 
 const FileUpload = () => {
-  const [file, setFile] = useState<File | null>(null);
+  const [files, setFiles] = useState({
+    prescription: null as File | null,
+    scan: null as File | null,
+    labReport: null as File | null,
+  });
   const [uploadStatus, setUploadStatus] = useState("");
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    type: string
+  ) => {
     if (event.target.files) {
-      setFile(event.target.files[0]);
+      setFiles((prevFiles) => ({
+        ...prevFiles,
+        [type]: event.target.files![0],
+      }));
     }
   };
 
   const handleFileUpload = async () => {
-    if (!file) {
-      setUploadStatus("No file selected.");
+    if (!files.prescription || !files.scan || !files.labReport) {
+      setUploadStatus("All three images are required.");
       return;
     }
 
-    const formData = new FormData();
-    formData.append("file", file);
-
     try {
-      //   const response = await fetch("http://127.0.0.1:8000/upload/", {
-      //     method: "POST",
-      //     body: formData,
-      //   });
+      setUploadStatus("Uploading...");
 
-      const response = await preSurgeryMedicine(formData);
-
-      if (response.status == 200) {
-        setUploadStatus("File uploaded successfully!");
-      } else {
-        setUploadStatus("File upload failed.");
+      // Upload prescription
+      const prescriptionResponse = await preSurgeryMedicine(files.prescription);
+      if (prescriptionResponse.status !== 200) {
+        throw new Error("Prescription upload failed.");
       }
+
+      // Upload scan
+      const scanResponse = await preSurgeryScans(files.scan);
+      if (scanResponse.status !== 200) {
+        throw new Error("Scan upload failed.");
+      }
+
+      // Upload lab report
+      const labReportResponse = await preSurgeryLabReports(files.labReport);
+      if (labReportResponse.status !== 200) {
+        throw new Error("Lab report upload failed.");
+      }
+
+      setUploadStatus("All files uploaded successfully!");
     } catch (error) {
       setUploadStatus("An error occurred during the upload.");
       console.error(error);
@@ -42,17 +60,41 @@ const FileUpload = () => {
 
   return (
     <div className="flex flex-col items-center">
-      <input
-        type="file"
-        accept="image/png, image/jpeg, image/jpg, image/webp"
-        onChange={handleFileChange}
-        className="mb-4"
-      />
+      <div className="mb-4">
+        <label className="block mb-2 text-sm">Upload Prescription</label>
+        <input
+          type="file"
+          accept="image/png, image/jpeg, image/jpg, image/webp"
+          onChange={(e) => handleFileChange(e, "prescription")}
+          className="text-xs"
+        />
+      </div>
+
+      <div className="mb-4">
+        <label className="block mb-2 text-sm">Upload Scan</label>
+        <input
+          type="file"
+          accept="image/png, image/jpeg, image/jpg, image/webp"
+          onChange={(e) => handleFileChange(e, "scan")}
+          className="text-xs"
+        />
+      </div>
+
+      <div className="mb-4">
+        <label className="block mb-2 text-sm">Upload Lab Report</label>
+        <input
+          type="file"
+          accept="image/png, image/jpeg, image/jpg, image/webp"
+          onChange={(e) => handleFileChange(e, "labReport")}
+          className="text-xs"
+        />
+      </div>
+
       <button
         onClick={handleFileUpload}
-        className="bg-blue-500 text-white px-4 py-2 rounded"
+        className="bg-blue-400 text-white px-4 py-2 rounded text-sm"
       >
-        Upload File
+        Upload Files
       </button>
       {uploadStatus && <p className="mt-4">{uploadStatus}</p>}
     </div>

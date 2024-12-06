@@ -11,7 +11,18 @@ client = Groq()
 
 def prescription_analyzer(image_path):
     base64_image = encode_image(image_path)
-    prompt = """Analyze the provided doctor's prescription image. Identify key medications, dosages, frequencies, and any relevant patient information (e.g., allergies, medical history).  Extract insights crucial for surgical procedure planning, such as potential drug interactions, contraindications, or necessary pre-operative adjustments.  Present these insights concisely."""
+    prompt = """Analyze the provided prescription image and extract relevant 
+        insights to improve the success probability of the surgical procedure.  Focus exclusively on information present within the prescription itself. Do not hallucinate information.
+
+        **Output Structure:**
+
+        * **medication:** List of all medications prescribed, including dosage and frequency.
+        * **allergies:** List of any documented allergies.
+        * **relevant_conditions:** List of relevant medical conditions impacting the surgery.
+        * **contraindications:** List of contraindications for specific surgical procedures or medications.
+        * **preoperative_instructions:** Any specific preoperative instructions mentioned.
+        * **insights:** A summary of how these prescription details can affect the surgical plan, including potential risks and precautions to take during the surgery based on the prescription.
+    """
 
     chat_completion = client.chat.completions.create(
         messages=[

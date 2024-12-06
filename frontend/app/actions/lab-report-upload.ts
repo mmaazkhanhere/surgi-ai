@@ -1,12 +1,12 @@
 import axios from "axios";
 
-export async function preSurgeryMedicine(file: File) {
+export async function preSurgeryLabReports(file: any) {
   try {
     const formData = new FormData();
     formData.append("file", file); // 'file' should match FastAPI parameter
 
     const response = await axios.post(
-      "http://localhost:8000/pre-surgery/medicine",
+      "http://localhost:8000/pre-surgery/lab-reports",
       formData,
       {
         headers: {
@@ -18,15 +18,11 @@ export async function preSurgeryMedicine(file: File) {
     console.log(response);
     if (response.status === 200) {
       return { status: 200, messages: "File uploaded successfully" };
-      return { status: 200, messages: "File uploaded successfully" };
     } else {
-      return {
-        status: response.status,
-        message: response.data?.message || "Error",
-      };
+      return { status: 400, message: "Error" };
     }
   } catch (error) {
-    console.error(error);
+    console.log(error);
     return { status: 500, message: "Something went wrong" };
   }
 }
