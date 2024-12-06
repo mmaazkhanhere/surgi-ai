@@ -18,6 +18,7 @@ export async function preSurgeryMedicine(file: File) {
     console.log(response);
     if (response.status === 200) {
       return { status: 200, messages: "File uploaded successfully" };
+      return { status: 200, messages: "File uploaded successfully" };
     } else {
       return {
         status: response.status,
