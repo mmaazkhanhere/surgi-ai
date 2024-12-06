@@ -1,17 +1,17 @@
 from langgraph.graph.state import StateGraph, END, START
 from langgraph.prebuilt import ToolNode
 
-from nodes.anatomy_node import anatomy_node
-from nodes.complication_management_node import complication_management_node
-from nodes.expert_surgeon_node import expert_surgeon_node
-from nodes.infection_prevention_node import infection_prevention_node
-from nodes.response_generation_node import response_generation_node
-from nodes.rewrite_node import rewrite
-from nodes.insights_accumulator_node import insight_accumulator_node
+from .nodes.anatomy_node import anatomy_node
+from .nodes.complication_management_node import complication_management_node
+from .nodes.expert_surgeon_node import expert_surgeon_node
+from .nodes.infection_prevention_node import infection_prevention_node
+from .nodes.response_generation_node import response_generation_node
+from .nodes.rewrite_node import rewrite
+from .nodes.insights_accumulator_node import insight_accumulator_node
 
-from routing_functions.grade_document import grade_document
+from .routing_functions.grade_document import grade_document
 
-from tools.query_database import query_database
+from .tools.query_database import query_database
 
 from state import State
 
