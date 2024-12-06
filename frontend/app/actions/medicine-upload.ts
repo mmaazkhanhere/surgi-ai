@@ -1,17 +1,20 @@
 import axios from "axios";
 
-export async function preSurgeryMedicine(formData: any) {
+export async function preSurgeryMedicine(file: any) {
   try {
     const response = await axios.post(
-      `http://localhost:8000/pre-surgery/medicine`,
+      "http://localhost:8000/pre-surgery/medicine",
+      file,
       {
-        body: formData,
+        headers: {
+          "Content-Type": file.type, // e.g., "image/jpeg"
+        },
       }
     );
 
     console.log(response);
     if (response.status === 200) {
-      return { status: 200, data: response.data };
+      return { status: 200, messages: "File uploaded successfully" };
     } else {
       return { status: 400, message: "Error" };
     }

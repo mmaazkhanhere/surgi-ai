@@ -16,6 +16,7 @@ python-dotenv = "^1.0.1"
 langchain-pinecone = "^0.2.0"
 langchain-huggingface = "^0.1.2"
 langchain-community = "^0.3.9"
+python-multipart = "^0.0.19"
 
 
 [build-system]
