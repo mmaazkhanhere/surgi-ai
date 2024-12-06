@@ -1,6 +1,12 @@
 "use client";
 import React, { useState } from "react";
+<<<<<<< HEAD
 import { uploadPreSurgeryFiles } from "../actions/pre-surgery-file-upload";
+=======
+import { preSurgeryMedicine } from "@/app/actions/medicine-upload";
+import { preSurgeryLabReports } from "@/app/actions/lab-report-upload";
+import { preSurgeryScans } from "@/app/actions/scan-upload";
+>>>>>>> main
 
 const FileUpload = () => {
   const [files, setFiles] = useState({
@@ -31,13 +37,34 @@ const FileUpload = () => {
     try {
       setUploadStatus("Uploading...");
 
+<<<<<<< HEAD
       const response = await uploadPreSurgeryFiles(files);
 
       if (response.status === "success") {
         setUploadStatus("All files uploaded successfully!");
       } else {
         throw new Error(response.message || "Upload failed.");
+=======
+      // Upload prescription
+      const prescriptionResponse = await preSurgeryMedicine(files.prescription);
+      if (prescriptionResponse.status !== 200) {
+        throw new Error("Prescription upload failed.");
+>>>>>>> main
       }
+
+      // Upload scan
+      const scanResponse = await preSurgeryScans(files.scan);
+      if (scanResponse.status !== 200) {
+        throw new Error("Scan upload failed.");
+      }
+
+      // Upload lab report
+      const labReportResponse = await preSurgeryLabReports(files.labReport);
+      if (labReportResponse.status !== 200) {
+        throw new Error("Lab report upload failed.");
+      }
+
+      setUploadStatus("All files uploaded successfully!");
     } catch (error) {
       setUploadStatus("An error occurred during the upload.");
       console.error(error);
@@ -80,7 +107,11 @@ const FileUpload = () => {
         onClick={handleFileUpload}
         className="bg-blue-400 text-white px-4 py-2 rounded text-sm"
       >
+<<<<<<< HEAD
         Upload Files and Generate Report
+=======
+        Upload Files
+>>>>>>> main
       </button>
       {uploadStatus && <p className="mt-4">{uploadStatus}</p>}
     </div>

@@ -5,6 +5,9 @@ from pydantic import BaseModel
 from pathlib import Path
 from PIL import Image
 import io
+from pathlib import Path
+from PIL import Image
+import io
 
 from agents.surgery_agent.surgery_agent import surgical_agent
 from agents.surgery_agent.surgery_agent import surgical_agent
@@ -22,6 +25,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+UPLOAD_DIR = Path("./uploads")
+UPLOAD_DIR.mkdir(exist_ok=True)
 
 UPLOAD_DIR = Path("./uploads")
 UPLOAD_DIR.mkdir(exist_ok=True)
