@@ -67,8 +67,39 @@ async def upload_file(file: UploadFile = File(...)):
         with file_path.open("wb") as f:
             f.write(file_content)
 
-        analysis = prescription_analyzer('./uploads/uploaded_medicine.jpg')
-        print(analysis)
+        return JSONResponse(
+            content={"status": "success", "message": "File uploaded and saved."},
+            status_code=200,
+        )
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        print(f"Unexpected error: {e}")
+        return JSONResponse(
+            content={"status": "error", "message": str(e)},
+            status_code=500,
+        )
+
+@app.post("/pre-surgery/scans")
+async def upload_file(file: UploadFile = File(...)):
+    try:
+        # Save the file content
+        file_content = await file.read()
+
+        # Validate the file as an image
+        try:
+            image = Image.open(io.BytesIO(file_content))
+            image.verify()  # Check if it's a valid image
+            image = Image.open(io.BytesIO(file_content))
+            image.load()  # Reopen the image to ensure it's decodable
+        except Exception as e:
+            print(f"Image validation error: {e}")
+            raise HTTPException(status_code=400, detail="Uploaded file is not a valid image.")
+
+        # Save the image as a file
+        file_path = UPLOAD_DIR / "scans.jpg"
+        with file_path.open("wb") as f:
+            f.write(file_content)
 
         return JSONResponse(
             content={"status": "success", "message": "File uploaded and saved."},
@@ -83,3 +114,37 @@ async def upload_file(file: UploadFile = File(...)):
             status_code=500,
         )
     
+
+@app.post("/pre-surgery/lab-reports")
+async def upload_file(file: UploadFile = File(...)):
+    try:
+        # Save the file content
+        file_content = await file.read()
+
+        # Validate the file as an image
+        try:
+            image = Image.open(io.BytesIO(file_content))
+            image.verify()  # Check if it's a valid image
+            image = Image.open(io.BytesIO(file_content))
+            image.load()  # Reopen the image to ensure it's decodable
+        except Exception as e:
+            print(f"Image validation error: {e}")
+            raise HTTPException(status_code=400, detail="Uploaded file is not a valid image.")
+
+        # Save the image as a file
+        file_path = UPLOAD_DIR / "lab_reports.jpg"
+        with file_path.open("wb") as f:
+            f.write(file_content)
+
+        return JSONResponse(
+            content={"status": "success", "message": "File uploaded and saved."},
+            status_code=200,
+        )
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        print(f"Unexpected error: {e}")
+        return JSONResponse(
+            content={"status": "error", "message": str(e)},
+            status_code=500,
+        )
