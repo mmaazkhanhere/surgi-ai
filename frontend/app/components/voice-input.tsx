@@ -8,6 +8,8 @@ import {
   SpeechRecognitionErrorEvent,
   SpeechRecognitionEvent,
 } from "@/app/types/global";
+import RoutingButtons from "./routing-buttons";
+import FileUpload from "./file-upload";
 
 /**
  * VoiceInput Component
@@ -17,6 +19,7 @@ const VoiceInput = () => {
   const recognitionRef = useRef<SpeechRecognition>();
 
   const [isActive, setIsActive] = useState<boolean>(false);
+  const [surgeryProcedure, setSurgeryProcedure] = useState<boolean>(false);
   const [text, setText] = useState<string>("");
   const [patientHistory, setPatientHistory] = useState<string>("");
   const [aiResponse, setAIResponse] = useState<string>("");
@@ -164,6 +167,11 @@ const VoiceInput = () => {
         </div>
       </div>
 
+      <RoutingButtons
+        surgeryProcedure={surgeryProcedure}
+        setSurgeryProcedure={setSurgeryProcedure}
+      />
+
       <PatientHistory setPatientHistory={setPatientHistory} />
 
       {isActive && (
@@ -182,7 +190,7 @@ const VoiceInput = () => {
         </div>
       )}
 
-      {patientHistory.length > 0 && (
+      {patientHistory.length > 0 && surgeryProcedure == false && (
         <>
           <button
             className={`w-full h-full flex items-center gap-x-2 justify-center uppercase font-semibold text-sm ${
@@ -213,6 +221,8 @@ const VoiceInput = () => {
           )}
         </>
       )}
+
+      {surgeryProcedure == true && <FileUpload />}
 
       {/* Display Error Messages */}
       {errorMessage && (

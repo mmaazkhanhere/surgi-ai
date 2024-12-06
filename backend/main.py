@@ -1,6 +1,8 @@
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel
+
 
 from agent import surgical_agent
 
@@ -37,3 +39,16 @@ async def surgical_query(input: DuringSurgery):
     }
     response = surgical_agent(state)
     return response
+
+@app.post('/pre-surgery/medicine')
+async def upload_file(request: Request):
+    try:
+        # Read the entire body of the request
+        file_content = await request.body()
+
+        # Pass the file content to another function for processing
+        print('file_content')
+
+        return JSONResponse(content={"status": "success",}, status_code=200)
+    except Exception as e:
+        return JSONResponse(content={"status": "error", "message": str(e)}, status_code=500)
