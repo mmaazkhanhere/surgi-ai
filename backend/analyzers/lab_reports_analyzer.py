@@ -11,7 +11,8 @@ client = Groq()
 
 def lab_reports_analyzer(image_path):
     base64_image = encode_image(image_path)
-    # prompt = """Analyze the provided doctor's prescription image. Identify key medications, dosages, frequencies, and any relevant patient information (e.g., allergies, medical history).  Extract insights crucial for surgical procedure planning, such as potential drug interactions, contraindications, or necessary pre-operative adjustments.  Present these insights concisely."""
+    prompt = """Analyze the lab report image uploaded and give valuable
+    insights that can be helpful in surgery"""
 
     chat_completion = client.chat.completions.create(
         messages=[
