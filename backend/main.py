@@ -6,14 +6,7 @@ from pathlib import Path
 from PIL import Image
 import io
 
-from analyzers.prescription_analyzer import prescription_analyzer
-from analyzers.scans_analyzer import scans_analyzer
-from analyzers.lab_reports_analyzer import lab_reports_analyzer
-
 from agents.surgery_agent.surgery_agent import surgical_agent
-from agents.pre_surgery_agent.surgical_procedure_agent import pre_surgical_report_agent
-
-from helper_functions.to_markdown import to_markdown
 
 class DuringSurgery(BaseModel):
     surgeon_query: str
