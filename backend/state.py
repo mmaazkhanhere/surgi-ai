@@ -19,7 +19,7 @@ class State(TypedDict):
   relevance: str
   answer: str
   max_iteration: int
-  current_iteration: int
+  current_iteration: int 
 
 class PreSurgeryState(TypedDict):
   patient_history: str
