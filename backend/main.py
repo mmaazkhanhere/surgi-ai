@@ -6,7 +6,14 @@ from pathlib import Path
 from PIL import Image
 import io
 
+from analyzers.prescription_analyzer import prescription_analyzer
+from analyzers.lab_reports_analyzer import lab_reports_analyzer
+from analyzers.scans_analyzer import scans_analyzer
+
 from agents.surgery_agent.surgery_agent import surgical_agent
+from agents.pre_surgery_agent.surgical_procedure_agent import pre_surgical_report_agent
+
+from helper_functions.to_markdown import to_markdown
 
 class DuringSurgery(BaseModel):
     surgeon_query: str
@@ -77,10 +84,36 @@ async def upload_files(
         process_file(scan, "scan.jpg")
         process_file(lab_report, "lab_report.jpg")
 
-        return JSONResponse(
-            content={"status": "success", "message": "All files uploaded and saved."},
-            status_code=200,
-        )
+        prescription = prescription_analyzer('./uploads/prescription.jpg')
+        print(f"Prescription: {prescription[:100]}")
+
+        scan = scans_analyzer('./uploads/scan.jpg')
+        print(f"Scan: {scan[:100]}")
+
+        lab_report = lab_reports_analyzer('./uploads/lab_report.jpg')
+        print(f"Lab Report: {lab_report[:100]}")
+
+        state = {
+            'prescription': prescription,
+            'scan': scan,
+            'lab_report': lab_report,
+            'surgery': operation,
+            'patient_history': patient_history,
+            'prescription_report_analyzer_node': '',
+            'lab_report_analyzer_node': '',
+            'scan_report_analyzer_node': '',
+            'instrumentation_report': '',
+            'risk_analyzer_report': '',
+            'anesthesia_consultant_report': '',
+            'surgical_workflow_report': '',
+            'emergency_protocol_advicer': '',
+            'accumulator': ''
+        }
+
+        response = pre_surgical_report_agent(state)
+        markdown_response = to_markdown(response)
+        return markdown_response
+
     except HTTPException as e:
         raise e
     except Exception as e:
