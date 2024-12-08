@@ -5,6 +5,10 @@ description = ""
 authors = ["Mian Maaz Ullah Khan <115078151+mmaazkhanhere@users.noreply.github.com>"]
 readme = "README.md"
 
+packages = [
+    { include = "main.py" }
+]
+
 [tool.poetry.dependencies]
 python = ">=3.10,<3.13"
 fastapi = "^0.115.6"
