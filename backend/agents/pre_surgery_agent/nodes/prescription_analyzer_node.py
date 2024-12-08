@@ -19,8 +19,8 @@ def prescription__report_analyzer_node(state: PreSurgeryState):
 
     print('Prescription Node')
     patient_history: str = state['patient_history']
-    prescription_report: str = state['prescription_report']
-    operation: str = state['operation']
+    prescription_report: str = state.get('prescription_report')
+    operation: str = state.get('operation')
 
     instructions = """Analyze the provided `prescription_report` to extract valuable insights relevant to the specified operation, considering the  
         patient's history.  Focus exclusively on the prescription report and disregard any other information provided.  

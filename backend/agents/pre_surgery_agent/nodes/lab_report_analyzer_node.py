@@ -19,8 +19,8 @@ def lab_report_analyzer_node(state: PreSurgeryState):
 
     print('Lab Report Analyzer Node')
     patient_history: str = state['patient_history']
-    lab_report: str = state['lab_report']
-    operation: str = state['operation']
+    lab_report: str = state.get('lab_report')
+    operation: str = state.get('operation')
 
     instructions = """
         Analyze the provided lab reports in the context of the patient's history and the upcoming operation.  

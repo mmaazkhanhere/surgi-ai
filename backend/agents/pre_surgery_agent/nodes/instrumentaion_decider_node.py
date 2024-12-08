@@ -19,7 +19,7 @@ def instrumentation_decider_node(state: PreSurgeryState):
 
     print('Instrumentation Node')
     patient_history: str = state['patient_history']
-    operation: str = state['operation']
+    operation: str = state.get('operation')
 
     instructions = """
         You are an expert in surgical instrumentation, with a focus on the precise selection of surgical instruments to enhance the surgical procedure.

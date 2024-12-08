@@ -19,8 +19,8 @@ def scan_report_analyzer_node(state: PreSurgeryState):
 
     print('Scan Node')
     patient_history: str = state['patient_history']
-    scan_reports: str = state['scan_report']
-    operation: str = state['operation']
+    scan_reports: str = state.get('scan_report')
+    operation: str = state.get('operation')
 
     instructions: str = """
         Analyze the provided medical scan reports to offer insights for a {operation} operation.  
@@ -31,7 +31,7 @@ def scan_report_analyzer_node(state: PreSurgeryState):
         {patient_history}
 
         **Operation:**
-        {operation_name}
+        {operation}
 
         **Scan Reports:**
         {scan_reports}

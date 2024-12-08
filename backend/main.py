@@ -1,5 +1,5 @@
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi import FastAPI, File, UploadFile, HTTPException
+from fastapi import FastAPI, File, UploadFile, HTTPException, Form
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from pathlib import Path
@@ -58,6 +58,8 @@ async def upload_files(
     prescription: UploadFile = File(...),
     scan: UploadFile = File(...),
     lab_report: UploadFile = File(...),
+    operation: str = Form(...),  # Using Form to accept non-file data
+    patient_history: str = Form(...),  # Using Form to accept non-file data
 ):
     try:
         # Function to validate and save images
@@ -84,6 +86,7 @@ async def upload_files(
         process_file(scan, "scan.jpg")
         process_file(lab_report, "lab_report.jpg")
 
+        # Analyze files (if needed)
         prescription = prescription_analyzer('./uploads/prescription.jpg')
         print(f"Prescription: {prescription[:100]}")
 
@@ -93,6 +96,7 @@ async def upload_files(
         lab_report = lab_reports_analyzer('./uploads/lab_report.jpg')
         print(f"Lab Report: {lab_report[:100]}")
 
+        # Constructing the state object with operation and patient history
         state = {
             'prescription': prescription,
             'scan': scan,
@@ -111,8 +115,8 @@ async def upload_files(
         }
 
         response = pre_surgical_report_agent(state)
-        markdown_response = to_markdown(response)
-        return markdown_response
+        # markdown_response = to_markdown(response)
+        return response
 
     except HTTPException as e:
         raise e

@@ -19,7 +19,7 @@ def surgical_workflow_node(state: PreSurgeryState):
 
     print('Surgical Workflow')
     accumulator_output: str = state['accumulator']
-    operation: str = state['operation']
+    operation: str = state.get('operation')
 
     instructions = """
         Create a detailed step-by-step surgical procedure report for the following surgery based on the provided information from the accumulator node.  The report should be comprehensive, covering all aspects of the procedure.

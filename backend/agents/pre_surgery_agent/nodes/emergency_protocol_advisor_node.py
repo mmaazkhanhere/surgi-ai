@@ -19,7 +19,7 @@ def emergency_protocol_advisor_node(state: PreSurgeryState):
 
     print('Emergency Protocol Advisor Node')
     patient_history: str = state['patient_history']
-    operation: str = state['operation']
+    operation: str = state.get('operation')
 
     instructions = """
         Act as an emergency protocol expert.  Given a patient's history and a planned surgical procedure, provide potential emergency guidelines and critical considerations.

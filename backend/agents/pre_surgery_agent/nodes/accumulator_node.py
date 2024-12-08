@@ -18,15 +18,17 @@ def accumulator_node(state: PreSurgeryState):
     """LangGraph node that gives insights related to potential emergency in surgery"""
 
     print('Accumulator Node')
-    patient_history: str = state['patient_history']
-    operation: str = state['operation']
-    scan_report_analyzer_node: str = state['scan_report_analyzer_node']
-    lab_report_analyzer_node: str = state['lab_report_analyzer_node']
-    prescription_report_analyzer_node: str = state['prescription_report_analyzer_node']
-    instrumentation_report: str = state['instrumentation_report']
-    risk_analyzer_report: str = state['risk_analyzer_report']
-    anesthesia_consultant_report: str = state['anesthesia_consultant_report']
-    emergency_protocol_advicer: str = state['emergency_protocol_advicer']
+    patient_history: str = state.get('patient_history')
+    operation: str = state.get('operation')
+    scan_report_analyzer_node: str = state.get('scan_report_analyzer_node')
+    lab_report_analyzer_node: str = state.get('lab_report_analyzer_node')
+    prescription_report_analyzer_node: str = state.get('prescription_report_analyzer_node')
+    instrumentation_report: str = state.get('instrumentation_report')
+    risk_analyzer_report: str = state.get('risk_analyzer_report')
+    anesthesia_consultant_report: str = state.get('anesthesia_consultant_report')
+    emergency_protocol_advicer: str = state.get('emergency_protocol_advicer')
+
+    print(f'Emergency Protocol: {emergency_protocol_advicer[:50]}')
 
     instructions = """
         You are an AI tasked with generating a comprehensive and detailed surgical procedure report based on the inputs from multiple specialized nodes. Accumulate and synthesize the following information:

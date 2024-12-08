@@ -10,6 +10,7 @@ import {
 } from "@/app/types/global";
 import RoutingButtons from "./routing-buttons";
 import FileUpload from "./file-upload";
+import { uploadPreSurgeryFiles } from "../actions/pre-surgery-file-upload";
 
 /**
  * VoiceInput Component
@@ -20,12 +21,26 @@ const VoiceInput = () => {
 
   const [isActive, setIsActive] = useState<boolean>(false);
   const [surgeryProcedure, setSurgeryProcedure] = useState<boolean>(false);
+  const [surgery, setSurgery] = useState<string>("");
   const [text, setText] = useState<string>("");
   const [patientHistory, setPatientHistory] = useState<string>("");
   const [aiResponse, setAIResponse] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string>("");
+
+  const [files, setFiles] = useState<Record<string, File | null>>({
+    prescription: null,
+    scan: null,
+    labReport: null,
+  });
+  const [uploadStatus, setUploadStatus] = useState("");
+
+  const handleOperationChange = (
+    event: React.ChangeEvent<HTMLInputElement> // Updated type to match <input>
+  ) => {
+    setSurgery(event.target.value);
+  };
 
   // Huggingface pretrained model name and inference endpoint
   const SELECTED_SOUND_MODEL = {
@@ -122,6 +137,27 @@ const VoiceInput = () => {
     } catch (error: any) {
       console.error("Error generating audio:", error);
       setErrorMessage(`Error generating audio: ${error.message}`);
+    }
+  };
+
+  const handleFileUpload = async () => {
+    if (!files.prescription || !files.scan || !files.labReport) {
+      setUploadStatus("All three files are required.");
+      return;
+    }
+
+    try {
+      setUploadStatus("Uploading...");
+      const response = await uploadPreSurgeryFiles(
+        files,
+        surgery,
+        patientHistory
+      );
+
+      setAIResponse(response.data);
+    } catch (error) {
+      console.error("Error during file upload:", error);
+      setUploadStatus("An error occurred during the upload.");
     }
   };
 
@@ -222,7 +258,32 @@ const VoiceInput = () => {
         </>
       )}
 
-      {surgeryProcedure == true && <FileUpload />}
+      {surgeryProcedure == true && (
+        <div className="flex flex-col">
+          <input
+            type="text"
+            className="text-sm px-4 py-2 mb-2"
+            placeholder="Enter operation you want to perform"
+            onChange={handleOperationChange}
+          />
+          <FileUpload
+            onFilesChange={(updatedFiles) => setFiles(updatedFiles)}
+          />
+
+          <button
+            onClick={handleFileUpload}
+            className="bg-blue-400 text-white px-4 py-2 rounded text-sm"
+          >
+            Upload Files and Generate Report
+          </button>
+        </div>
+      )}
+
+      {surgeryProcedure == true && (
+        <p className="mb-4">
+          <strong>AI Response:</strong> {aiResponse}
+        </p>
+      )}
 
       {/* Display Error Messages */}
       {errorMessage && (

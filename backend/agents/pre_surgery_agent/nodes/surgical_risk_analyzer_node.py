@@ -19,7 +19,7 @@ def surgical_risk_analyzer_node(state: PreSurgeryState):
 
     print('Risk Analyzer Node')
     patient_history: str = state['patient_history']
-    operation: str = state['operation']
+    operation: str = state.get('operation')
 
     instructions = """
         You are an expert in surgical risk analysis.  Your task is to provide a detailed analysis of the potential risks associated with a surgical procedure, considering the patient's history and the specific operation to be performed.

@@ -19,7 +19,7 @@ def anesthesia_consultant_node(state: PreSurgeryState):
 
     print('Anesthesia Consultant Node')
     patient_history: str = state['patient_history']
-    operation: str = state['operation']
+    operation: str = state.get('operation')
 
     instructions = """
         You are an expert anesthesiologist reviewing a surgical procedure and creating guidelines for anesthesia.  Given the patient's history and the planned operation, provide detailed anesthesia recommendations and potential complications.  Your output should be formatted as a structured report, including the following sections:
