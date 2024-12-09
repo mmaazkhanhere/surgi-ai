@@ -57,7 +57,7 @@ def lab_report_analyzer_node(state: PreSurgeryState):
 
         **Output Format:**
 
-        Present your analysis in a clear, concise, and well-structured format.  Use bullet points or numbered lists for better 
+        Present your analysis in a clear, concise, and well-structured format. Must be short and concise. Use bullet points or numbered lists for better 
         readability.  Each point should include:
         * The specific lab value(s) being discussed.
         * The numerical results (with units).

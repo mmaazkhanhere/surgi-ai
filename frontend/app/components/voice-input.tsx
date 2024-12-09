@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 "use client";
 
 import { useState, useEffect, useRef } from "react";
@@ -12,12 +14,14 @@ import RoutingButtons from "./routing-buttons";
 import FileUpload from "./file-upload";
 import { uploadPreSurgeryFiles } from "../actions/pre-surgery-file-upload";
 
+import Markdown from "markdown-to-jsx";
+
 /**
  * VoiceInput Component
  * Captures user speech, sends it to the AI, and plays the AI's response as audio.
  */
 const VoiceInput = () => {
-  const recognitionRef = useRef<SpeechRecognition>();
+  const recognitionRef = useRef<any>();
 
   const [isActive, setIsActive] = useState<boolean>(false);
   const [surgeryProcedure, setSurgeryProcedure] = useState<boolean>(false);
@@ -25,6 +29,7 @@ const VoiceInput = () => {
   const [text, setText] = useState<string>("");
   const [patientHistory, setPatientHistory] = useState<string>("");
   const [aiResponse, setAIResponse] = useState<string>("");
+  const [surgicalReport, setSurgicalReport] = useState("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string>("");
@@ -34,7 +39,6 @@ const VoiceInput = () => {
     scan: null,
     labReport: null,
   });
-  const [uploadStatus, setUploadStatus] = useState("");
 
   const handleOperationChange = (
     event: React.ChangeEvent<HTMLInputElement> // Updated type to match <input>
@@ -142,22 +146,19 @@ const VoiceInput = () => {
 
   const handleFileUpload = async () => {
     if (!files.prescription || !files.scan || !files.labReport) {
-      setUploadStatus("All three files are required.");
       return;
     }
 
     try {
-      setUploadStatus("Uploading...");
       const response = await uploadPreSurgeryFiles(
         files,
         surgery,
         patientHistory
       );
 
-      setAIResponse(response.data);
+      setSurgicalReport(response.data);
     } catch (error) {
       console.error("Error during file upload:", error);
-      setUploadStatus("An error occurred during the upload.");
     }
   };
 
@@ -281,7 +282,7 @@ const VoiceInput = () => {
 
       {surgeryProcedure == true && (
         <p className="mb-4">
-          <strong>AI Response:</strong> {aiResponse}
+          <strong>AI Response:</strong> <Markdown>{surgicalReport}</Markdown>
         </p>
       )}
 
@@ -293,7 +294,7 @@ const VoiceInput = () => {
       )}
 
       {/* Audio Player */}
-      {audioUrl && (
+      {surgeryProcedure == false && audioUrl && (
         <audio key={audioUrl} id="aiAudio" controls className="mt-4" autoPlay>
           <source type="audio/mpeg" src={audioUrl} />
           Your browser does not support the audio element.

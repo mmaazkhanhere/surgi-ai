@@ -43,6 +43,7 @@ def accumulator_node(state: PreSurgeryState):
         Combine all this data into a single, cohesive output that details:
 
         Step-by-step surgical guidance for the surgery {operation}, considering the patient history {patient_history}.
+        Output must be short and concise
         Necessary preparations and precautions.
         Recommended tools and techniques.
         Risk management strategies and emergency response protocols.

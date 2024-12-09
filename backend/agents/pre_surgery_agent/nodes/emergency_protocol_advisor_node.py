@@ -46,6 +46,7 @@ def emergency_protocol_advisor_node(state: PreSurgeryState):
         * **Personnel Roles:** [Outline the responsibilities of the surgical team members.]
         * **Monitoring Parameters:** [Specify critical parameters to be monitored.]
         * **Patient-Specific Considerations:** [Address any patient-specific risk factors and adjustments to standard protocols.]
+        * **Output should be less than 1 paragraphs
 
 
         **Example:**
@@ -58,6 +59,7 @@ def emergency_protocol_advisor_node(state: PreSurgeryState):
         * **Patient-Specific Considerations:** Patient has history of bleeding disorder; administer Factor VIIa (or similar) as per protocol.
 
         ..... (continue giving other potential emergencies and guidelines)
+
 
     """
 

@@ -27,7 +27,7 @@ def prescription__report_analyzer_node(state: PreSurgeryState):
 
         **Guidelines for the Output:**
 
-        1. **Direct Relevance:**  Only provide insights directly related to the medication(s) listed, their potential impact on the planned surgery, or any contraindications.
+        1. **Direct Relevance:**  Only provide insights directly related to the medication(s) listed, their potential impact on the planned surgery, or any contraindications. 
         2. **Clarity and Conciseness:** Present the insights in a clear, concise manner, using bullet points for each key finding.
         3. **Actionable Information:** Frame the insights to be actionable for a surgeon writing a surgical procedure report.  Mention specific concerns or precautions the surgeon should take during or after the procedure due to the medications identified.
         4. **Specific Operation Focus:**  The insights should explicitly relate to the operation to be performed.
@@ -38,6 +38,8 @@ def prescription__report_analyzer_node(state: PreSurgeryState):
         * **Actionable Recommendation:** Provide specific recommendations for the surgeon.
 
 
+        Outout must be short and concise
+        
         **Inputs:**
 
         * `prescription_report`:  {prescription_report}

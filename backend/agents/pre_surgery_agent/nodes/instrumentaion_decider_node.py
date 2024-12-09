@@ -39,7 +39,7 @@ def instrumentation_decider_node(state: PreSurgeryState):
 
         4. **Report Integration:** Explain how the chosen instrument set can be used to enhance the surgical procedure report. Suggest specific details and data points that should be included in the report about the use of each instrument to enhance clarity.
 
-        5. **Format:**  The output should be structured as a bulleted list. Each bullet point should include the instrument name, a brief description of its function, the rationale for its use in this specific case, and notes about its incorporation into the surgical report.
+        5. **Format:**  The output should be structured as a bulleted list. Each bullet point should include the instrument name, a brief description of its function, the rationale for its use in this specific case, and notes about its incorporation into the surgical report. Must be less than one paragraph
 
 
         **Example:**
@@ -51,6 +51,7 @@ def instrumentation_decider_node(state: PreSurgeryState):
 
             **Instrument:** .... (add more relevant instruments)
         **Output:**
+
     """
     prompt: str = instructions.format(
         operation=operation,

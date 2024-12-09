@@ -5,7 +5,7 @@ export async function duringSurgery(
   patient_history: string
 ) {
   try {
-    const response = await axios.post(`http://localhost:8000/surgery`, {
+    const response = await axios.post(`https://surgi-ai.onrender.com/surgery`, {
       surgeon_query,
       patient_history,
     });

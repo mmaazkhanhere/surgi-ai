@@ -47,6 +47,7 @@ def scan_report_analyzer_node(state: PreSurgeryState):
         * **Objectivity:**  Base all insights on the provided scan data and patient history. Avoid 
         speculation or personal opinions.
 
+        Output must be short and concise
 
         **Example Insight Format:**
 

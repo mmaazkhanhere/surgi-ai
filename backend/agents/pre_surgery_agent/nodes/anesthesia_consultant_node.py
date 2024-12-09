@@ -38,7 +38,7 @@ def anesthesia_consultant_node(state: PreSurgeryState):
 
         **Output Format:**
 
-        Use clear and concise language.  Structure your response into the five sections mentioned above. Be precise and provide specific details to support your recommendations.  Quantify risks whenever possible.  Prioritize patient safety and well-being.
+        Use clear and concise language.  Must be less than one paragaph. Be precise and provide specific details to support your recommendations.  Quantify risks whenever possible.  Prioritize patient safety and well-being.
     """
 
     prompt: str = instructions.format(

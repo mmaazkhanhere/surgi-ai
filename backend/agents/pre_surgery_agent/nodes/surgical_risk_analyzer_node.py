@@ -37,6 +37,9 @@ def surgical_risk_analyzer_node(state: PreSurgeryState):
         **Operation to be Performed:**
         {operation}
 
+        Output must be short and concise
+    
+
         **Example Output:**
 
         **1. Patient History Summary:** The patient's history of diabetes increases the risk of wound infections and delayed healing.  Their history of hypertension necessitates careful monitoring of blood pressure during and after surgery.

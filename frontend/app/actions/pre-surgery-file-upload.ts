@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import axios from "axios";
 
 export async function uploadPreSurgeryFiles(
@@ -14,7 +15,7 @@ export async function uploadPreSurgeryFiles(
     formData.append("patient_history", patientHistory); // Add patient history
 
     const response = await axios.post(
-      "http://localhost:8000/pre-surgery/upload",
+      "https://surgi-ai.onrender.com/pre-surgery/upload",
       formData,
       {
         headers: {
